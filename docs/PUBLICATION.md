@@ -21,7 +21,7 @@ Instale Gitleaks 8.30.1 no PATH e ative os hooks locais após clonar:
 git config core.hooksPath .githooks
 ```
 
-Os hooks bloqueiam commit/push se o scanner faltar ou detectar violações. Hooks locais não são instalados automaticamente pelo Git em outros clones e podem ser desativados; a CI complementa essa proteção.
+Os hooks bloqueiam commit/push se o scanner faltar ou detectar violações. Hooks locais não são instalados automaticamente pelo Git em outros clones e podem ser desativados. Esta amostra não possui CI; a revisão e as verificações locais devem ocorrer antes do envio.
 
 Alternativamente, configure o caminho local do executável com `git config rin.gitleaksPath CAMINHO_DO_EXECUTAVEL`. Esse valor fica apenas na configuração local do Git.
 
@@ -33,8 +33,8 @@ Alternativamente, configure o caminho local do executável com `git config rin.g
 
 O guard inspeciona o conteúdo do index e todas as versões alcançáveis no histórico local. Gitleaks complementa a verificação com regras de credenciais. Nenhum scanner prova ausência absoluta de dados pessoais; revisão humana continua necessária.
 
-CI ocorre depois do push: rejeitar um PR não desfaz a exposição de conteúdo que já chegou a um branch público. Nunca use um PR público como área de triagem de material privado. Se houver vazamento, revogue credenciais, contenha o acesso e trate histórico, forks e caches separadamente.
+Rejeitar um PR não desfaz a exposição de conteúdo que já chegou a um branch público. Nunca use um PR público como área de triagem de material privado. Se houver vazamento, revogue credenciais, contenha o acesso e trate histórico, forks e caches separadamente.
 
 ## Proteções
 
-Os workflows usam permissões de leitura, ações fixadas por commit e não recebem segredos de produção. Mudanças nas verificações de publicação, workflows ou configurações de segurança exigem revisão do mantenedor. Branch protection e push protection são configurações do GitHub e devem ser verificadas no servidor; arquivos YAML por si só não as ativam.
+Não há workflows de CI nem checks remotos obrigatórios. Permanecem as verificações locais de publicação, a proteção da branch e as verificações de segredos do GitHub. Mudanças nessas proteções exigem revisão do mantenedor. Branch protection e push protection são configurações do servidor; os arquivos deste repositório por si só não as ativam.

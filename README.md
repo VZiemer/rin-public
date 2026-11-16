@@ -51,6 +51,6 @@ O JAR do wrapper não é distribuído: este repositório contém apenas texto. U
 
 O build cria figuras geométricas neutras em `app/build/generated/publicResources`. Não lê, baixa ou copia os assets privados da RIN. Sem configuração Firebase, o plugin Google Services fica desativado e notificações remotas exigem configuração própria. Autenticação e APIs dependem de um ambiente próprio configurado nas variáveis `RIN_AGENT_BASE_URL`, `RIN_COGNITO_CLIENT_ID`, `RIN_COGNITO_USER_POOL_ID` e `RIN_COGNITO_REGION`.
 
-Leia [arquitetura](docs/ARCHITECTURE.md), [configuração](docs/DEVELOPMENT.md) e [política de publicação](docs/PUBLICATION.md). A CI executa testes e verificações; não faz deploy nem usa credenciais de produção.
+Leia [arquitetura](docs/ARCHITECTURE.md), [configuração](docs/DEVELOPMENT.md) e [política de publicação](docs/PUBLICATION.md). Este repositório é uma amostra técnica, sem CI ou deploy automático. As verificações podem ser executadas localmente.
 
 Publicar o código não concede direitos sobre personagens ou assets privados. Nenhuma licença de reutilização é concedida por este README; a escolha de licença é independente desta separação técnica.

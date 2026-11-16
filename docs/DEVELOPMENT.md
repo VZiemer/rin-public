@@ -14,7 +14,7 @@ terraform fmt -check -recursive infra/terraform
 terraform -chdir=infra/terraform/environments/dev validate
 ```
 
-`terraform apply` cria recursos cobrados e fica fora da CI. State, plans e valores locais não entram no repositório. Configure Firebase e chaves de providers em Secrets Manager, com ARNs fornecidos ao ambiente. Não reutilize identificadores ou credenciais do ambiente privado.
+`terraform apply` cria recursos cobrados e deve ser executado manualmente no seu próprio ambiente. State, plans e valores locais não entram no repositório. Configure Firebase e chaves de providers em Secrets Manager, com ARNs fornecidos ao ambiente. Não reutilize identificadores ou credenciais do ambiente privado.
 
 ## Android
 
