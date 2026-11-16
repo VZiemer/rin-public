@@ -1,0 +1,50 @@
+import type { Logger } from '../application/ports/logger.js';
+const allowed = new Set([
+  'requestId',
+  'agentRunId',
+  'conversationId',
+  'toolName',
+  'toolRisk',
+  'iteration',
+  'durationMs',
+  'result',
+  'callId',
+  'toolInput',
+  'payload',
+  'stopReason',
+  'content',
+  'name',
+  'rawInput',
+  'issues',
+  'input',
+  'output',
+  'errorName',
+  'errorMessage',
+  'errorCode',
+  'decision',
+  'reason',
+  'slot',
+  'reasons',
+  'local',
+  'now',
+  'userId',
+  'activeCount',
+  'upcomingCount',
+  'overdueCount',
+  'unscheduledCount',
+  'opportunity',
+  'score',
+  'roll',
+  'factors',
+  'shouldSend',
+]);
+export const logger: Logger = {
+  event(name, fields = {}) {
+    console.info(
+      JSON.stringify({
+        event: name,
+        ...Object.fromEntries(Object.entries(fields).filter(([key]) => allowed.has(key))),
+      }),
+    );
+  },
+};

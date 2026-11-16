@@ -1,0 +1,32 @@
+aws_region  = "us-east-1"
+environment = "dev"
+
+# GPT-OSS 120B chat with the existing AWS credentials:
+# agent_model_provider = "bedrock"
+# agent_bedrock_model_id = "openai.gpt-oss-120b-1:0"
+# agent_bedrock_model_arns = ["arn:aws:bedrock:us-east-1::foundation-model/openai.gpt-oss-120b-1:0"]
+
+# GPT through AWS credentials (requires model access on this AWS account):
+# agent_model_provider = "bedrock-openai"
+# bedrock_openai_model_id = "us.openai.gpt-6.1-sol"
+# bedrock_openai_model_arns = [
+#   "arn:aws:bedrock:us-east-1:ACCOUNT:inference-profile/us.openai.gpt-6.1-sol",
+#   "arn:aws:bedrock:us-east-1::foundation-model/openai.gpt-6.1-sol",
+#   "arn:aws:bedrock:us-east-2::foundation-model/openai.gpt-6.1-sol",
+#   "arn:aws:bedrock:us-west-2::foundation-model/openai.gpt-6.1-sol",
+# ]
+# Direct OpenAI API alternative:
+# agent_model_provider = "openai"
+# openai_model_id      = "gpt-6.1-sol"
+# openai_secret_arn    = "arn:aws:secretsmanager:us-east-1:ACCOUNT:secret:NAME"
+
+# Cron ticks (enabled by default, run for every user owning an enabled device).
+# Both require Bedrock + Firebase to actually deliver.
+# enable_reminder_tick_schedule      = true
+# reminder_tick_schedule_expression  = "rate(5 minutes)"
+# enable_proactive_tick_schedule     = true
+# proactive_tick_schedule_expression = "rate(30 minutes)"
+# timezone                           = "America/Sao_Paulo"
+# internal_user_id                   = "<internal-uuid>"  # required when test push is enabled
+# enable_asset_onboarding            = true  # needs dev user's internal UUID, Bedrock and Firebase
+# enable_statement_imports           = true  # private CSV uploads; deterministic processing, no LLM required

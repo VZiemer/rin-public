@@ -1,0 +1,8 @@
+#!/bin/sh
+set -eu
+node scripts/publication-guard.mjs --history
+if ! command -v gitleaks >/dev/null 2>&1; then
+  echo 'Install Gitleaks and add it to PATH before pushing.' >&2
+  exit 1
+fi
+gitleaks git . --redact --ignore-gitleaks-allow --log-opts="--all"

@@ -1,0 +1,9 @@
+{
+  "name": "rin-public",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test:publication": "node --test scripts/publication-guard.test.mjs",
+    "check:publication": "node scripts/publication-guard.mjs --history"
+  }
+}

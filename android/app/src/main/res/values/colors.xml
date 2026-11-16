@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="rin_assistant_backdrop">#99000000</color>
+    <color name="rin_bubble_background">#FFFBFE</color>
+    <color name="rin_bubble_border">#CAC4D0</color>
+    <color name="rin_bubble_text">#1C1B1F</color>
+    <color name="rin_focus_timer_text">#FFFBFE</color>
+    <color name="rin_focus_caption_text">#FFFBFE</color>
+    <color name="rin_focus_backdrop">#CC05070A</color>
+</resources>

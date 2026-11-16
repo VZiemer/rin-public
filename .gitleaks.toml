@@ -1,0 +1,3 @@
+title = "RIN public secret scanning"
+[extend]
+useDefault = true

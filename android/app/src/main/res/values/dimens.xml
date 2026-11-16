@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="rin_avatar_initial_left_offset">24dp</dimen>
+    <dimen name="rin_avatar_initial_top_offset">96dp</dimen>
+    <dimen name="rin_avatar_size">160dp</dimen>
+    <dimen name="rin_avatar_minimized_size">72dp</dimen>
+    <dimen name="rin_bubble_max_width">260dp</dimen>
+    <dimen name="rin_bubble_padding">12dp</dimen>
+    <dimen name="rin_bubble_action_spacing">8dp</dimen>
+    <dimen name="rin_overlay_slide_distance">12dp</dimen>
+    <dimen name="rin_focus_overlay_padding">16dp</dimen>
+    <dimen name="rin_focus_avatar_size">260dp</dimen>
+    <dimen name="rin_focus_item_spacing">10dp</dimen>
+    <dimen name="rin_focus_action_spacing">8dp</dimen>
+</resources>
