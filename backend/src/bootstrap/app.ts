@@ -87,7 +87,7 @@ async function applyFinanceCorrection(
   );
   return {
     skillId: 'finance' as const,
-    facts: [{ id: corrected.id, statement: 'A correção confirmada foi aplicada.' }],
+    facts: [{ id: corrected.id, statement: 'The confirmed correction was applied.' }],
     calculated: [
       {
         id: 'amount',
@@ -96,7 +96,7 @@ async function applyFinanceCorrection(
         currency: corrected.currency,
       },
     ],
-    explanations: ['A confirmação estava ligada a uma operação pendente.'],
+    explanations: ['The confirmation was linked to a pending operation.'],
     missing: [],
     proposedActions: [],
     tone: { intensity: 'measured' as const, allowSarcasm: false },
@@ -321,7 +321,7 @@ export async function createApp() {
         repos.workingMemory,
         config.modelProvider === 'bedrock'
           ? new ModelWorkingMemorySummarizer(backgroundModel)
-          : { summarize: async (previous) => previous || 'Conversa iniciada no modo estático.' },
+          : { summarize: async (previous) => previous || 'Conversation started in static mode.' },
         { now: () => new Date() },
       ),
       logger,

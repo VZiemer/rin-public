@@ -27,7 +27,7 @@ export class WorldPreferences {
     const value = settingsInput.parse(input);
     const previous = await this.repo.get(userId);
     if (!previous && !value.city)
-      throw new Error('Informe sua cidade para configurar o contexto do mundo.');
+      throw new Error('Enter your city to configure world context.');
     const location =
       value.city || value.region
         ? await this.source.locate(

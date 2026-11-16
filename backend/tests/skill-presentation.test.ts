@@ -38,7 +38,7 @@ test('hostile sarcasm is dropped when the subject is suffering', () => {
   const output = presentSkill(distress, 'Que frescura. Para de drama.');
   expect(output.message).not.toMatch(/frescura|drama/i);
   expect(output.avatarState).toBe('FOCUSED');
-  expect(output.message).toMatch(/não vou afirmar|Nao vou afirmar|desabafar/i);
+  expect(output.message).toMatch(/I will not assert|vent/i);
   const direct = presentSkill(distress);
   expect(direct.avatarState).toBe('SOFT_SMILE');
   expect(direct.message).toContain('desabafar');

@@ -47,6 +47,13 @@ function words(text: string) {
     .flatMap((word) => (aliases[word] ?? word).split(' '));
 }
 const ignored = new Set([
+  'the',
+  'an',
+  'your',
+  'costume',
+  'outfit',
+  'image',
+  'images',
   'a',
   'o',
   'as',
@@ -148,13 +155,13 @@ export class HipnoseImages {
       ...(imageName !== undefined ? { imageName } : {}),
     });
     if (!state.diagnosticsEnabled)
-      return reply('O modo hipnose não está habilitado para este usuário e assistente.');
+      return reply('Hypnosis mode is not enabled for this user and assistant.');
     if (command.kind === 'image-auto') {
-      return reply('Voltei à escolha automática das imagens.');
+      return reply('I switched back to automatic image selection.');
     }
     const catalog = await this.deps.catalog.get(state.assistantId);
     if (!catalog || !catalog.sets.some((set) => set.enabled))
-      return reply('Não tenho imagens disponíveis no catálogo deste assistente.');
+      return reply('There are no images available in this assistant catalog.');
     if (command.kind === 'image-list') {
       const images = catalog.sets
         .filter((set) => set.enabled)
@@ -162,7 +169,7 @@ export class HipnoseImages {
       const pages = Math.ceil(images.length / 10);
       if (command.page < 1 || command.page > pages)
         return reply(
-          `Essa página não existe. Use “hipnose liste imagens” ou uma página entre 1 e ${pages}.`,
+          `That page does not exist. Use “hypnosis list images” or a page between 1 and ${pages}.`,
         );
       const lines = images
         .slice((command.page - 1) * 10, command.page * 10)
@@ -171,25 +178,25 @@ export class HipnoseImages {
             `• ${image.id} — ${image.name} (${image.expression}). ${set.useCase.slice(0, 150)}`,
         );
       return reply(
-        `Imagens disponíveis (${images.length}; página ${command.page}/${pages}):\n${lines.join('\n')}\nUse “hipnose use NOME” ou descreva a roupa, como “hipnose se vista pra praia”.${pages > command.page ? ` Próxima: “hipnose liste imagens ${command.page + 1}”.` : ''}`,
+        `Available images (${images.length}; page ${command.page}/${pages}):\n${lines.join('\n')}\nUse “hypnosis use NAME” or describe the outfit, as in “hypnosis use beach”.${pages > command.page ? ` Next: “hypnosis list images ${command.page + 1}”.` : ''}`,
       );
     }
     const matches = findHipnoseImages(catalog, command.target);
     if (!matches.length)
       return reply(
-        'Não encontrei uma imagem para esse pedido. Use “hipnose liste imagens” e escolha um nome do catálogo.',
+        'I could not find an image for that request. Use “hypnosis list images” and choose a catalog name.',
       );
     if (matches.length > 1)
       return reply(
-        `Mais de uma imagem combina com o pedido: ${matches
+        `More than one image matches the request: ${matches
           .slice(0, 10)
           .map((m) => m.image.id)
-          .join(', ')}. Escolha com “hipnose use NOME”.`,
+          .join(', ')}. Choose with “hypnosis use NAME”.`,
       );
     const { image } = matches[0]!;
     if (!this.deps.delivery)
       return reply(
-        'O download de imagens não está configurado. Não consegui aplicar essa escolha.',
+        'Image downloading is not configured. I could not apply this selection.',
       );
     let prepared: Device[] = [];
     try {
@@ -199,11 +206,11 @@ export class HipnoseImages {
     }
     if (!prepared.length)
       return reply(
-        'Não consegui disponibilizar a imagem no seu dispositivo. Verifique o registro do app e tente novamente.',
+        'I could not make the image available on your device. Check the app registration and try again.',
       );
     const latest = await this.deps.states.get(state.userId, state.assistantId);
     if (!latest?.diagnosticsEnabled || latest.version !== state.version)
-      return reply('A configuração mudou durante o comando. Envie-o novamente.');
+      return reply('The configuration changed during the command. Send it again.');
     // Invalidate only delivery bookkeeping, so the very next scheduler cycle restores
     // the automatic choice even if its previous refresh is less than 30 minutes old.
     for (const device of prepared) {
@@ -213,7 +220,7 @@ export class HipnoseImages {
       });
     }
     return reply(
-      `Vou usar ${image.name} (${image.id}) agora. Na próxima conversa ou sincronização, volto a seguir as regras automáticas.`,
+      `I will use ${image.name} (${image.id}) now. The next conversation or sync will follow automatic rules again.`,
       image.id,
     );
   }

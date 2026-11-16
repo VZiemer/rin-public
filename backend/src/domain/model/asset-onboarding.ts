@@ -44,5 +44,5 @@ export const assetOnboardingSchema = z
 export type AssetOnboarding = z.infer<typeof assetOnboardingSchema>;
 export type AssetUsageDecision = z.infer<typeof assetUsageDecisionSchema>;
 export function assetContextQuestion(imageName: string) {
-  return `Recebi a imagem "${imageName}". Em que contexto devo usá-la? Diga a ocasião e, se houver, horário, datas ou humor.`;
+  return `I received the image "${imageName}". When should I use it? Specify the occasion and, if applicable, times, dates or mood.`;
 }

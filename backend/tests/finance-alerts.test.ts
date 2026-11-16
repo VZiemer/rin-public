@@ -71,7 +71,7 @@ test('alerts are discrete, factual, and not repeated for the same threshold', ()
     alreadySentKeys: [],
   });
   expect(due[0]?.reasonCode).toBe('due_bill');
-  expect(due[0]?.text).toBe('A Rin tem um aviso financeiro para você.');
+  expect(due[0]?.text).toBe('Rin has a financial alert for you.');
   expect(due[0]?.text).not.toMatch(/R\$|divida|d[ií]vida/i);
   const repeat = planFinanceAlerts({
     userId: 'user-a',

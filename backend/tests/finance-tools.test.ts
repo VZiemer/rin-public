@@ -21,8 +21,8 @@ test('analysis explains empty periods, currency splits and reported balance', as
     askingBalance: true,
   });
   expect(empty.calculated).toEqual([]);
-  expect(empty.explanations.join(' ')).toMatch(/não vou inventar/i);
-  expect(empty.missing).toContain('saldo informado');
+  expect(empty.explanations.join(' ')).toMatch(/I will not invent/i);
+  expect(empty.missing).toContain('reported balance');
 
   await ledger.recordEntry({
     userId: 'user-a',
@@ -69,7 +69,7 @@ test('analysis explains empty periods, currency splits and reported balance', as
   expect(output.message).toContain('R$ 258,00');
   expect(output.message).toContain('R$ 1000,00');
   expect(output.message).not.toMatch(/R\$ 47,00|47,00 USD/);
-  expect(result.explanations.join(' ')).toMatch(/Não consultei banco/);
+  expect(result.explanations.join(' ')).toMatch(/I did not contact a bank/);
   expect(result.calculated.find((value) => value.id === 'balance-USD')).toBeUndefined();
 });
 
@@ -89,6 +89,6 @@ test('a movement without currency is not stored', async () => {
       { userId: 'user-a', conversationId: 'c1' },
     ),
   );
-  expect(result).toMatchObject({ status: 'needs_input', missing: ['moeda'] });
+  expect(result).toMatchObject({ status: 'needs_input', missing: ['currency'] });
   expect(await ledger.listEntries('user-a', 'RIN')).toEqual([]);
 });

@@ -108,10 +108,10 @@ class CognitoAuthRepository(
         return when {
             type.contains("NotAuthorized") || type.contains("UserNotFound") -> AuthError.InvalidCredentials()
             type.contains("UserNotConfirmed") -> AuthError.NotConfirmed()
-            type.contains("UsernameExists") -> AuthError.Unavailable("Essa conta ja existe. Entre ou confirme o codigo.")
-            type.contains("InvalidPassword") -> AuthError.Unavailable("Senha fraca: use pelo menos 8 caracteres, com letra e numero.")
+            type.contains("UsernameExists") -> AuthError.Unavailable("This account already exists. Sign in or confirm the code.")
+            type.contains("InvalidPassword") -> AuthError.Unavailable("Weak password: use at least 8 characters, including a letter and a number.")
             type.contains("InvalidParameter") -> AuthError.Unavailable(message)
-            type.contains("CodeMismatch") || type.contains("ExpiredCode") -> AuthError.Unavailable("Codigo invalido ou expirado.")
+            type.contains("CodeMismatch") || type.contains("ExpiredCode") -> AuthError.Unavailable("Invalid or expired code.")
             else -> AuthError.Unavailable(message)
         }
     }

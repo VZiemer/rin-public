@@ -5,6 +5,13 @@ import { retentionFor, type DomainRecord } from '../src/domain/skills/domain-rec
 
 const now = new Date('2026-10-11T15:00:00.000Z');
 
+test('English summaries preserve the same privacy boundaries', () => {
+  const base = { userId: 'user-a', assistantId: 'RIN', records: [], now };
+  expect(projectSkillContext({ ...base, skillId: 'finance', workingSummary: 'I feel anxious and have been crying.' }).workingSummary).not.toMatch(/anxious|crying/);
+  expect(projectSkillContext({ ...base, skillId: 'support', workingSummary: 'I spent USD 80 and feel sad.' }).workingSummary).toBe('I spent [amount] and feel sad.');
+  expect(projectSkillContext({ ...base, skillId: 'flirt', workingSummary: 'My salary and therapy costs.' }).workingSummary).toBeNull();
+});
+
 function record(partial: Partial<DomainRecord> & Pick<DomainRecord, 'id' | 'domain' | 'sensitivity'>): DomainRecord {
   const retention = retentionFor(partial.sensitivity, now);
   return {

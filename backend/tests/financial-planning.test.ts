@@ -466,7 +466,7 @@ test('chat purchase checks do not record purchases, and the finance skill can re
       projection: { skillId: 'finance', records: [], workingSummary: null, omitted: [] },
     },
   );
-  expect(presentSkill(result!).message).toContain('Cabe nos dados');
+  expect(presentSkill(result!).message).toContain('It fits the data');
   expect(await f.ledger.listEntries('u', 'RIN')).toEqual([]);
   const registry = createSkillRegistry();
   for (const tool of financialPlanningTools(f.planning))
@@ -509,7 +509,7 @@ test('credit received in chat is not recorded as income', async () => {
       projection: { skillId: 'finance', records: [], workingSummary: null, omitted: [] },
     },
   );
-  expect(result?.facts[0]?.statement).toContain('dívida');
+  expect(result?.facts[0]?.statement).toContain('debt');
   expect(await f.ledger.listEntries('u', 'RIN')).toEqual([]);
 });
 

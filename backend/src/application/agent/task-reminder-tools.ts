@@ -198,7 +198,7 @@ export function taskReminderTools(tasks: Tasks, reminders: Reminders) {
     defineTool({
       name: 'complete_task',
       description:
-        "Mark a specific pending task as completed. Use its id from context when possible; otherwise use the task title. For 'ja fiz', 'terminei' or 'esta concluido', call this only when the referenced task is unambiguous from the conversation/context.",
+        "Mark a specific pending task as completed. Use its id from context when possible; otherwise use the task title. For 'I did it', 'I finished' or 'it is done', call this only when the referenced task is unambiguous from the conversation/context.",
       risk: 'WRITE',
       inputSchema: completionSchema,
       execute: async (v, c) => {
@@ -248,7 +248,7 @@ export function taskReminderTools(tasks: Tasks, reminders: Reminders) {
     defineTool({
       name: 'complete_reminder',
       description:
-        "Mark a specific active reminder as completed. Use its id from context when possible; otherwise use the reminder title. For 'ja fiz', 'terminei' or 'esta concluido', call this only when the referenced reminder is unambiguous from the conversation/context.",
+        "Mark a specific active reminder as completed. Use its id from context when possible; otherwise use the reminder title. For 'I did it', 'I finished' or 'it is done', call this only when the referenced reminder is unambiguous from the conversation/context.",
       risk: 'WRITE',
       inputSchema: completionSchema,
       execute: async (v, c) => {

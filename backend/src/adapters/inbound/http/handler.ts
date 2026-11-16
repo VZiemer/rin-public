@@ -139,29 +139,29 @@ export function response(statusCode: number, body: unknown) {
   };
 }
 const errorMessages: Record<string, string> = {
-  invalid_request: 'Request invalido.',
-  invalid_json: 'JSON invalido.',
-  body_too_large: 'Corpo da requisicao muito grande.',
-  unauthorized: 'Nao autorizado.',
-  confirmation_required: 'Confirmacao necessaria.',
-  invalid_model_output: 'Resposta invalida do modelo.',
-  invalid_tool_arguments: 'Argumentos invalidos para ferramenta.',
-  model_unavailable: 'Modelo indisponivel.',
-  multiple_model_calls_unsupported: 'O modelo solicitou acoes demais de uma vez.',
-  agent_deadline_exceeded: 'O agente demorou demais para responder.',
-  max_tool_iterations: 'O agente excedeu o limite de ferramentas.',
-  unknown_tool: 'Ferramenta desconhecida.',
-  ASSISTANT_NOT_FOUND: 'Assistente nao encontrado.',
-  assistant_not_found: 'Assistente nao encontrado.',
-  profile_not_found: 'Perfil nao encontrado.',
-  identity_already_linked: 'Identidade ja vinculada.',
-  device_forbidden: 'Dispositivo nao pertence ao usuario.',
-  internal_error: 'Erro interno.',
+  invalid_request: 'Invalid request.',
+  invalid_json: 'Invalid JSON.',
+  body_too_large: 'Request body too large.',
+  unauthorized: 'Unauthorized.',
+  confirmation_required: 'Confirmation required.',
+  invalid_model_output: 'Invalid model response.',
+  invalid_tool_arguments: 'Invalid tool arguments.',
+  model_unavailable: 'Model unavailable.',
+  multiple_model_calls_unsupported: 'The model requested too many actions at once.',
+  agent_deadline_exceeded: 'The agent took too long to respond.',
+  max_tool_iterations: 'The agent exceeded the tool limit.',
+  unknown_tool: 'Unknown tool.',
+  ASSISTANT_NOT_FOUND: 'Assistant not found.',
+  assistant_not_found: 'Assistant not found.',
+  profile_not_found: 'Profile not found.',
+  identity_already_linked: 'Identity already linked.',
+  device_forbidden: 'The device does not belong to the user.',
+  internal_error: 'Internal error.',
 };
 function errorResponse(statusCode: number, code: string) {
   return response(statusCode, {
     code: code.toUpperCase(),
-    message: errorMessages[code] ?? 'Nao foi possivel concluir a solicitacao.',
+    message: errorMessages[code] ?? 'Could not complete the request.',
   });
 }
 export interface HttpDependencies {

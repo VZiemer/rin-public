@@ -29,7 +29,7 @@ export function suggestFollowUp(input: {
     skillId: input.skillId,
     origin: 'suggestion',
     subject: input.subject,
-    nextStep: 'perguntar só se a pessoa aceitar',
+    nextStep: 'ask only if the person agrees',
     authorization: 'none',
     status: 'suggested',
     kind: 'suggestion',
@@ -47,18 +47,18 @@ export async function handleFollowUp(
   const open = (await repo.list(turn.userId, turn.assistantId)).filter((item) =>
     OPEN.has(item.status),
   );
-  if (text.includes('depois me pergunta')) {
+  if (text.includes('depois me pergunta') || /^ask me later(?: about .+)?$/.test(text)) {
     // Support push authorization and the follow-up must be saved together by
     // the consent handler, rather than creating an unlinked support follow-up.
     if (turn.selection.primary === 'support') return null;
     return remember(repo, ids, turn);
   }
-  if (/\b(nao precisa|pode deixar|deixa pra la)\b/.test(text) && !text.includes('me chamar')) {
+  if (/\b(no need|never mind|nao precisa|pode deixar|deixa pra la)\b/.test(text) && !text.includes('me chamar')) {
     return close(repo, open, 'refused', turn.now);
   }
-  if (/\b(conclui|pode encerrar|ja resolvi)\b/.test(text))
+  if (/\b(i finished|close this follow-up|already resolved|conclui|pode encerrar|ja resolvi)\b/.test(text))
     return close(repo, open, 'completed', turn.now);
-  if (text.includes('semana que vem')) return postpone(repo, open, turn.now);
+  if (text.includes('semana que vem') || text === 'next week') return postpone(repo, open, turn.now);
   return null;
 }
 
@@ -75,7 +75,7 @@ async function remember(
     skillId: turn.selection.primary,
     origin: 'user_request',
     subject: turn.selection.primary,
-    nextStep: 'perguntar de novo sobre o assunto combinado',
+    nextStep: 'ask again about the agreed subject',
     authorization: 'accepted',
     status: 'accepted',
     kind: 'commitment',
@@ -88,11 +88,11 @@ async function remember(
     facts: [
       {
         id: followUp.id,
-        statement: 'Vou perguntar de novo quando fizer sentido. Isso ficou combinado.',
+        statement: 'I will ask again when it makes sense, as agreed.',
       },
     ],
     calculated: [],
-    explanations: ['Um pedido seu vira acompanhamento. Uma sugestão minha, sozinha, não.'],
+    explanations: ['Your request creates a follow-up. My suggestion alone does not.'],
     missing: [],
     proposedActions: [],
     tone: { intensity: 'casual', allowSarcasm: true },
@@ -120,7 +120,7 @@ async function close(
       {
         id: current.id,
         statement:
-          status === 'refused' ? 'Beleza, não vou insistir nisso.' : 'Fechei esse acompanhamento.',
+          status === 'refused' ? 'All right, I will not insist on this.' : 'I closed this follow-up.',
       },
     ],
     calculated: [],
@@ -147,9 +147,9 @@ async function postpone(
   });
   return {
     skillId: current.skillId,
-    facts: [{ id: current.id, statement: 'Deixo para a semana que vem.' }],
+    facts: [{ id: current.id, statement: 'I will leave it until next week.' }],
     calculated: [],
-    explanations: ['Até lá isso não entra na fila de mensagens.'],
+    explanations: ['Until then, this will not enter the message queue.'],
     missing: [],
     proposedActions: [],
     tone: { intensity: 'casual', allowSarcasm: true },

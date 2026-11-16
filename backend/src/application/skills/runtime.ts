@@ -74,7 +74,7 @@ export interface SkillRuntimeDeps {
 
 export function skillFailureOutput(): AgentOutput {
   return {
-    message: 'Não consegui consultar nem gravar isso agora. Nada foi registrado.',
+    message: 'I could not retrieve or save this right now. Nothing was recorded.',
     avatarState: 'NEUTRAL',
     priority: 'NORMAL',
     actions: [],
@@ -126,7 +126,7 @@ export class SkillRuntime {
       const matched = matchPendingOperation(input.message, open);
       if (matched.kind === 'ambiguous') {
         return {
-          message: 'Tem mais de uma operação pendente. Diz qual delas você quer confirmar.',
+          message: 'There is more than one pending operation. Tell me which one you want to confirm.',
           avatarState: 'FOCUSED',
           priority: 'NORMAL',
           actions: [],
@@ -334,7 +334,7 @@ export class SkillRuntime {
         updatedAt: now.toISOString(),
       });
       return {
-        message: 'Não vou fazer essa operação.',
+        message: 'I will not perform this operation.',
         avatarState: 'NEUTRAL',
         priority: 'NORMAL',
         actions: [],

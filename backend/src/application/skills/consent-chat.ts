@@ -29,37 +29,37 @@ export async function handleConsent(
   if (turn.selection.primary !== 'support') return null;
   const text = normalize(turn.message);
   if (text === '' || text === '...' || text === '.') return null;
-  if (/\b(apaga isso|nao quero que guarde|revoga)\b/.test(text))
+  if (/\b(delete this|do not save this|revoke|apaga isso|nao quero que guarde|revoga)\b/.test(text))
     return erase(consents, followUps, turn);
-  if (text.includes('pode guardar'))
+  if (text.includes('pode guardar') || text === 'you can save this preference')
     return grant(
       consents,
       followUps,
       ids,
       turn,
       'store_preference',
-      'Vou guardar só essa preferência, por pouco tempo.',
+      'I will save only this preference, for a short time.',
     );
-  if (text.includes('pode me chamar depois') || text.includes('depois me pergunta'))
+  if (text.includes('pode me chamar depois') || text.includes('depois me pergunta') || text === 'you can check in later' || text === 'ask me later')
     return grant(
       consents,
       followUps,
       ids,
       turn,
       'follow_up_push',
-      'Posso chamar depois, com uma mensagem discreta.',
+      'I can check in later with a discreet message.',
     );
-  if (text.includes('so conversar agora') || text.includes('vamos conversar agora')) {
+  if (text.includes('so conversar agora') || text.includes('vamos conversar agora') || text === 'just talk now') {
     return grant(
       consents,
       followUps,
       ids,
       turn,
       'talk_now',
-      'Então a gente conversa agora. Não vou guardar nem chamar depois por causa disso.',
+      'Then let us talk now. I will not save this or contact you later because of it.',
     );
   }
-  if (text.includes('nao precisa me chamar')) return declineFollowUp(consents, followUps, turn);
+  if (text.includes('nao precisa me chamar') || text === 'do not check in later') return declineFollowUp(consents, followUps, turn);
   return null;
 }
 
@@ -93,7 +93,7 @@ async function grant(
       skillId: 'support',
       origin: 'user_request',
       subject: consent.subject,
-      nextStep: 'retomar a conversa com uma mensagem discreta, se a pessoa quiser',
+      nextStep: 'resume the conversation with a discreet message if the person wants to',
       authorization: 'accepted',
       status: 'accepted',
       kind: 'commitment',
@@ -110,8 +110,8 @@ async function grant(
     calculated: [],
     explanations: [
       purpose === 'talk_now'
-        ? 'Conversar agora não autoriza memória permanente nem um push.'
-        : 'Silêncio não entra como autorização.',
+        ? 'Talking now does not authorize permanent memory or a push notification.'
+        : 'Silence is not authorization.',
     ],
     missing: [],
     proposedActions: [],
@@ -139,9 +139,9 @@ async function erase(
   }
   return {
     skillId: 'support',
-    facts: [{ id: 'erased', statement: 'Apaguei o que estava guardado sobre isso.' }],
+    facts: [{ id: 'erased', statement: 'I deleted what was saved about this.' }],
     calculated: [],
-    explanations: ['Não vou usar silêncio nem essa recusa como sinal de piora.'],
+    explanations: ['I will not treat silence or this refusal as a sign of deterioration.'],
     missing: [],
     proposedActions: [],
     tone: { intensity: 'gentle', allowSarcasm: false },
@@ -170,9 +170,9 @@ async function declineFollowUp(
   }
   return {
     skillId: 'support',
-    facts: [{ id: 'declined', statement: 'Tudo bem. Não vou chamar por causa disso.' }],
+    facts: [{ id: 'declined', statement: 'All right. I will not contact you about this.' }],
     calculated: [],
-    explanations: ['A recusa encerra o acompanhamento, sem cobrança.'],
+    explanations: ['Refusing ends the follow-up without pressure.'],
     missing: [],
     proposedActions: [],
     tone: { intensity: 'gentle', allowSarcasm: false },

@@ -398,19 +398,19 @@ function specialKind(
     label === 'unknown' ||
     label === 'desconhecido'
   ) {
-    warnings.add('Há empréstimo, estorno ou operação ambígua: escolha o tipo antes de confirmar.');
+    warnings.add('There is a loan, refund or ambiguous transaction: select the type before confirming.');
     return 'unknown';
   }
   if (
     /\b(?:transferencia|transfer)\b/.test(label) ||
     /\btransferencia\b.*\b(?:contas proprias|minhas contas|entre contas|minha conta)\b/.test(text)
   ) {
-    warnings.add('Confira se as transferências identificadas são entre contas próprias.');
+    warnings.add('Check whether the identified transfers are between your own accounts.');
     return 'transfer';
   }
   if (/\btransferencia\b/.test(text)) {
     warnings.add(
-      'Há transferência sem indicação de contas próprias: escolha o tipo antes de confirmar.',
+      'A transfer does not indicate ownership of the accounts: select the type before confirming.',
     );
     return 'unknown';
   }
@@ -448,7 +448,7 @@ export class CsvStatementExtractor implements StatementExtractor {
         !credit?.hasCurrency &&
         !/R\$|\bBRL\b|reais/i.test(header[columns.amount ?? columns.debit ?? columns.credit!]!)
       )
-        warnings.add('Moeda ausente no CSV: BRL foi assumido; confira a moeda antes de confirmar.');
+        warnings.add('Currency missing from CSV: BRL was assumed; check the currency before confirming.');
       return { money, debit, credit };
     });
     const tokens = monies.flatMap(({ money, debit, credit }) =>
@@ -498,13 +498,13 @@ export class CsvStatementExtractor implements StatementExtractor {
         if (job.sourceKind === 'card') {
           if (statedDirection === 'income' || (direction === 'expense' && !statedDirection)) {
             warnings.add(
-              'Há crédito ou valor negativo no cartão: escolha o tipo antes de confirmar.',
+              'There is a credit or negative card amount: select the type before confirming.',
             );
             kind = 'unknown';
           } else kind = 'expense';
         } else if (direction && statedDirection && direction !== statedDirection) {
           warnings.add(
-            'Há conflito entre o tipo e o sinal do valor: escolha o tipo antes de confirmar.',
+            'The type conflicts with the amount sign: select the type before confirming.',
           );
           kind = 'unknown';
         } else if (statedDirection) kind = statedDirection;
@@ -512,7 +512,7 @@ export class CsvStatementExtractor implements StatementExtractor {
         else if (signedBankLayout) kind = 'income';
         else {
           warnings.add(
-            'Há valor sem direção de entrada ou saída: escolha o tipo antes de confirmar.',
+            'An amount has no income or expense direction: select the type before confirming.',
           );
           kind = 'unknown';
         }

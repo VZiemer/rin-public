@@ -13,6 +13,8 @@ import {
 } from '../../domain/skills/subject.js';
 
 const FINANCE_WORDS = [
+  'statement', 'invoice', 'financial plan', 'can i buy', 'how much can i spend',
+  'debt', 'debts', 'spent', 'expense', 'expenses', 'budget', 'salary', 'income',
   'extrato',
   'fatura',
   'plano financeiro',
@@ -35,6 +37,8 @@ const FINANCE_WORDS = [
   'receita',
 ];
 const SUPPORT_WORDS = [
+  'desperate', 'anxious', 'anxiety', 'sad', 'vent', 'suffering', 'panic', 'crying',
+  'want to die', 'kill myself', 'hurt myself',
   'desesperado',
   'desesperada',
   'ansioso',
@@ -83,7 +87,7 @@ export function selectSkill(input: SelectionInput): SkillSelection {
   if (finance > 0 && support > 0) {
     return selection('support', 'inferred', ended(active, 'support', 'finance'), 'finance');
   }
-  // World questions leave the previous skill, including "e aquela notícia de política?".
+  // World questions leave the previous skill, including "what about that political news?".
   // Explicit personal-finance and support intents still take priority.
   if (finance === 0 && support === 0 && isWorldConversation(text))
     return selection('conversation', 'explicit', ended(active, 'conversation'));

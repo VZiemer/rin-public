@@ -183,7 +183,7 @@ export class RunAgent {
       output.actions.length ||
       protectedInteraction(message) ||
       isSeriousSocialTurn(message) ||
-      /^(?:nao consegui|não consegui|confirme a acao|confirme a ação)/i.test(output.message)
+      /^(?:I could not|Confirm the action|nao consegui|não consegui|confirme a acao|confirme a ação)/i.test(output.message)
     )
       return;
     try {

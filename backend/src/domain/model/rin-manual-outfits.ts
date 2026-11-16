@@ -6,10 +6,10 @@ import {
 } from './rin-assets.js';
 
 export const rinManualOutfits = [
-  { id: 'rin_00_rabbit', name: 'Fantasia de coelinha' },
-  { id: 'rin_00_maid', name: 'Fantasia de maid' },
-  { id: 'rin_00_sexymaid', name: 'Fantasia de maid sexy' },
-  { id: 'rin_00_nude', name: 'Nude (sem roupa)' },
+  { id: 'rin_00_rabbit', name: 'Bunny costume' },
+  { id: 'rin_00_maid', name: 'Maid costume' },
+  { id: 'rin_00_sexymaid', name: 'Sexy maid costume' },
+  { id: 'rin_00_nude', name: 'Nude (no clothing)' },
 ] as const;
 
 export function isManualRinImage(id: string) {
@@ -22,7 +22,7 @@ export function manualRinOutfitSet(image: RinAssetImage): RinAssetSet {
   return rinAssetSetSchema.parse({
     id: outfit.id,
     name: outfit.name,
-    useCase: `${outfit.name}. Visual fictício, disponível somente por pedido explícito via hipnose ou "use fantasia".`,
+    useCase: `${outfit.name}. Fictional appearance, available only through an explicit hypnosis or outfit request.`,
     enabled: true,
     manualOnly: true,
     priority: 0,

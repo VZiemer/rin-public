@@ -146,9 +146,9 @@ export class PublicWorldSources implements WorldSources {
     );
     const match = matches.length === 1 ? matches[0] : undefined;
     if (!match)
-      throw new Error('Cidade ambígua ou não encontrada. Informe cidade e nome do estado.');
+      throw new Error('City ambiguous or not found. Provide the city and state name.');
     if (match.timezone !== 'America/Sao_Paulo')
-      throw new Error('O boletim suporta por enquanto cidades no fuso de São Paulo.');
+      throw new Error('The briefing currently supports cities in the Sao Paulo time zone.');
     return {
       city: match.name,
       region: match.admin1,

@@ -27,7 +27,7 @@ export function shoppingTools(shopping: ShoppingItems, reminders: Reminders) {
     defineTool({
       name: 'add_shopping_items_with_reminder',
       description:
-        "Add one or more things to the shopping list and also create a timed/date reminder for buying them. Use when the user explicitly gives a time/date, such as 'me lembre às 18h de comprar leite'.",
+        "Add one or more things to the shopping list and also create a timed/date reminder for buying them. Use when the user explicitly gives a time/date, such as 'remind me at 18:00 to buy milk'.",
       risk: 'WRITE',
       inputSchema: shoppingWithReminderSchema,
       execute: async (v, c) => {
@@ -51,7 +51,7 @@ export function shoppingTools(shopping: ShoppingItems, reminders: Reminders) {
     defineTool({
       name: 'remove_shopping_items',
       description:
-        "Remove purchased shopping-list items. Use for phrases like 'já comprei leite', 'comprei leite e arroz', or 'pode tirar sabão da lista'.",
+        "Remove purchased shopping-list items. Use for phrases like 'I bought milk', 'I bought milk and rice', or 'remove soap from the list'.",
       risk: 'WRITE',
       inputSchema: itemsSchema,
       execute: (v, c) => shopping.remove(c.userId, v.items),

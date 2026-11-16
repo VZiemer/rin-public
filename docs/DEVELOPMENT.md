@@ -1,12 +1,12 @@
-# Ambiente de desenvolvimento
+# Development setup
 
 ## Backend
 
-Use `backend/.env.example` como referência e forneça variáveis ao processo. O arquivo não é carregado automaticamente. Testes usam mocks e dados sintéticos, sem depender de AWS ou Firebase. `MODEL_PROVIDER=static` permite validar o fluxo do agente sem chamadas a modelos, mas handlers que usam repositories DynamoDB ainda precisam de configuração ou mocks.
+Use `backend/.env.example` as a reference and supply environment variables to the process. The file is not loaded automatically. Tests use mocks and synthetic data without depending on AWS or Firebase. `MODEL_PROVIDER=static` allows testing the agent flow without model calls, but handlers using DynamoDB repositories still need configuration or mocks.
 
-O build gera bundles Lambda e ZIPs em `backend/dist/`, sempre ignorados. Não publique os artefatos de build como releases sem uma revisão específica.
+The build produces Lambda bundles and ZIPs in `backend/dist/`, which is always ignored. Do not publish build artifacts as releases without a separate review.
 
-Para um deploy próprio, configure credenciais AWS fora do Git, revise `infra/terraform/environments/dev/terraform.tfvars.example` e rode:
+For your own deployment, configure AWS credentials outside Git, review `infra/terraform/environments/dev/terraform.tfvars.example` and run these commands from `backend/`:
 
 ```sh
 terraform -chdir=infra/terraform/environments/dev init -backend=false
@@ -14,12 +14,12 @@ terraform fmt -check -recursive infra/terraform
 terraform -chdir=infra/terraform/environments/dev validate
 ```
 
-`terraform apply` cria recursos cobrados e deve ser executado manualmente no seu próprio ambiente. State, plans e valores locais não entram no repositório. Configure Firebase e chaves de providers em Secrets Manager, com ARNs fornecidos ao ambiente. Não reutilize identificadores ou credenciais do ambiente privado.
+`terraform apply` creates billable resources and must be run manually in your own environment. State, plans and local values do not belong in the repository. Configure Firebase and provider keys in Secrets Manager, supplying their ARNs to the environment. Do not reuse identifiers or credentials from the private environment.
 
 ## Android
 
-Instale JDK 17, Gradle 9.7.1 e Android SDK 37. Defina `ANDROID_HOME`. Opcionalmente, crie seu próprio `android/app/google-services.json`; o arquivo é ignorado e também bloqueado pela verificação de publicação. O build sem esse arquivo gera um app técnico para inspeção e testes, sem push Firebase funcional.
+Install JDK 17, Gradle 9.7.1 and Android SDK 37. Set `ANDROID_HOME`. Optionally create your own `android/app/google-services.json`; this file is ignored and blocked by the publication check. Without it, the build produces a technical app for inspection and testing without functional Firebase push notifications.
 
-As variáveis `RIN_AGENT_BASE_URL`, `RIN_DEVICE_ID`, `RIN_COGNITO_CLIENT_ID`, `RIN_COGNITO_USER_POOL_ID` e `RIN_COGNITO_REGION` são lidas pelo Gradle. Use valores do seu próprio ambiente. Nunca inclua tokens de acesso nessas variáveis nem comite APKs.
+Gradle reads `RIN_AGENT_BASE_URL`, `RIN_DEVICE_ID`, `RIN_COGNITO_CLIENT_ID`, `RIN_COGNITO_USER_POOL_ID` and `RIN_COGNITO_REGION`. Use values from your own environment. Never put access tokens in these variables or commit APKs.
 
-A edição pública desativa backup Android e remove logs com tokens FCM e payloads de notificações. Isso não substitui uma auditoria de segurança do produto antes de uso em produção.
+The public edition disables Android backup and removes logs containing FCM tokens and notification payloads. This does not replace a product security audit before production use.

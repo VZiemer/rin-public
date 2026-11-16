@@ -121,7 +121,7 @@ test('legacy pending manual outfits never activate an image while asking for cla
   f.data.set('rin_00_nude', f.pending('rin_00_nude'));
   f.analyzer.analyze.mockRejectedValueOnce(new Error('unavailable'));
   const output = await f.chat.handle(userId, 'RIN', 'rin_00_nude somente manual');
-  expect(output?.message).toContain('Não consegui interpretar');
+  expect(output?.message).toContain('I could not interpret');
   expect(output).not.toHaveProperty('imageName');
   expect(output?.actions).toEqual([]);
 });
@@ -204,7 +204,7 @@ test('ambiguous response asks again and persists the clarification across conver
     { answer: 'à noite', question: 'Qual horário define a noite?' },
   ]);
   const output = await f.chat.handle(userId, 'RIN', 'Das 22h às 6h, prioridade 200');
-  expect(output?.message).toContain('Salvei');
+  expect(output?.message).toContain('I saved');
   expect(f.catalog.publish.mock.calls[0]?.[0].sets[0]).toMatchObject({
     useCase: usage.useCase,
     rules: usage.rules,
@@ -224,7 +224,7 @@ test('unrelated chat and invalid model output never publish rules', async () => 
     usage: { ...usage, rules: { command: 'delete' } },
   } as never);
   expect((await f.chat.handle(userId, 'RIN', 'use sempre'))?.message).toContain(
-    'Não consegui interpretar',
+    'I could not interpret',
   );
   expect(f.catalog.publish).not.toHaveBeenCalled();
 });
@@ -233,7 +233,7 @@ test('multiple uploads require an explicit image name', async () => {
   const f = fixture();
   f.data.set(image.id, f.pending());
   f.data.set('rin_other', f.pending('rin_other'));
-  expect((await f.chat.handle(userId, 'RIN', 'use à noite'))?.message).toContain('Inclua o nome');
+  expect((await f.chat.handle(userId, 'RIN', 'use à noite'))?.message).toContain('Include the image name');
   expect(f.analyzer.analyze).not.toHaveBeenCalled();
   await f.chat.handle(userId, 'RIN', `${image.id}: 22h às 6h`);
   expect(f.data.get(image.id)?.status).toBe('completed');
@@ -271,7 +271,7 @@ test('publication is recoverable after catalog commit but before pending complet
     return original(record, revision);
   };
   await expect(f.chat.handle(userId, 'RIN', 'ok')).rejects.toThrow('network');
-  expect((await f.chat.handle(userId, 'RIN', 'ok'))?.message).toContain('Salvei');
+  expect((await f.chat.handle(userId, 'RIN', 'ok'))?.message).toContain('I saved');
   expect(f.catalog.publish).toHaveBeenCalledTimes(1);
 });
 
@@ -311,13 +311,13 @@ test('RunAgent routes developer image replies before normal skills and remembers
   );
   expect(
     (await agent.execute(userId, '22h às 6h', 'app-conversation', { assistantId: 'RIN' })).message,
-  ).toContain('Salvei');
+  ).toContain('I saved');
   expect(builder.build).not.toHaveBeenCalled();
   expect(remember.execute).toHaveBeenCalledWith(
     userId,
     'app-conversation',
     '22h às 6h',
-    expect.stringContaining('Salvei'),
+    expect.stringContaining('I saved'),
     'RIN',
   );
 });

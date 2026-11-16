@@ -77,7 +77,7 @@ test('legacy states and defaults omit socialConfig without changing relationship
   expect(socialStyle(null)).toBe('');
   expect(behaviorStyle(null)).toBe(rinPersonalityStyle.join('\n'));
   expect(behaviorStyle(undefined, true)).toBe(rinConversationStyle.join('\n'));
-  expect(behaviorStyle({ ...snapshot(), state }, true)).toContain('natural Portuguese swearing');
+  expect(behaviorStyle({ ...snapshot(), state }, true)).toContain('natural swearing');
 });
 
 test.each([0, 100])('accepts each social dimension at the boundary %i', (level) => {
@@ -119,8 +119,8 @@ test('maximum configuration enables strong contextual banter without requiring s
   expect(prompt).toContain('"darkHumorLevel":100');
   expect(prompt).toContain('"teasingLevel":100');
   expect(prompt).toContain('"sarcasmLevel":100');
-  expect(prompt).toContain('"caralho"');
-  expect(prompt).toContain('quinta-série');
+  expect(prompt).toContain('"fuck"');
+  expect(prompt).toContain('juvenile');
   expect(prompt).toContain('not a quota or a probability');
   expect(prompt).toContain('Do not insert profanity in every reply');
   expect(prompt).toContain('override conflicting legacy delivery defaults');
@@ -164,7 +164,7 @@ test('independent dimensions override the inherited humor setting', () => {
 test('low profanity allows only light swearing', () => {
   const prompt = socialStyle(snapshot({ ...maximum, profanityLevel: 10 }));
   expect(prompt).toContain('only occasional light swearing');
-  expect(prompt).not.toContain('"caralho"');
+  expect(prompt).not.toContain('"fuck"');
 });
 
 test.each([
@@ -198,7 +198,7 @@ test('isolated character conversations use the same social controls and support 
   const ctx = await context(snapshot());
   const prompt = characterBanterPrompt(ctx, 'Se eu ganhar na loteria te compro roupas.');
   expect(prompt).toContain(socialStyle(ctx.behavior, 'Se eu ganhar na loteria te compro roupas.'));
-  expect(prompt).toContain('"caralho"');
+  expect(prompt).toContain('"fuck"');
   expect(prompt).toContain('actions=[]');
   expect(characterBanterPrompt(ctx, 'Rin, tô muito mal hoje.')).toContain(
     'RIN CURRENT TURN — SERIOUS SUPPORT:',

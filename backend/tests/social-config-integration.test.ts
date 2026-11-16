@@ -171,7 +171,7 @@ test('SkillRuntime forwards character banter through the same social controls', 
   expect(render).toHaveBeenCalledWith(context, message);
   const request = generate.mock.calls[0]?.[0];
   expect(request?.systemPrompt).toContain('RIN SOCIAL CONFIG:');
-  expect(request?.systemPrompt).toContain('"caralho"');
+  expect(request?.systemPrompt).toContain('"fuck"');
   expect(request?.systemPrompt).not.toContain('RIN CURRENT TURN — SERIOUS SUPPORT:');
   expect(request?.systemPrompt).not.toContain('ACTIVE_SKILL:');
   expect(request?.tools).toEqual([]);

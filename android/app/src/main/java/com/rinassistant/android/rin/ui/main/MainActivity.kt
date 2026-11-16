@@ -260,7 +260,7 @@ class MainActivity : ComponentActivity() {
         is AuthError.InvalidCredentials -> getString(R.string.auth_error)
         is AuthError.NotConfirmed -> {
             authMode = AuthMode.CONFIRM
-            "Confirme o codigo enviado ao e-mail."
+            "Confirm the code sent to your email."
         }
         is AuthError.Unavailable -> error.message ?: getString(R.string.auth_error)
         else -> error.message ?: getString(R.string.auth_error)

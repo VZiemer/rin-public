@@ -36,11 +36,11 @@ test('chat records, queries, corrects and limits without inventing money movemen
   const recorded = await handleFinanceChat(books, turn('gastei 42 reais no mercado'));
   expect(presentSkill(recorded!).message).toContain('R$ 42,00');
   const again = await handleFinanceChat(books, turn('gastei 42 reais no mercado'));
-  expect(again?.facts[0]?.statement).toMatch(/já estava registrado/);
+  expect(again?.facts[0]?.statement).toMatch(/already recorded/);
   expect(await books.ledger.listEntries('user-a', 'RIN')).toHaveLength(1);
 
   const spent = await handleFinanceChat(books, turn('quanto gastei com delivery este mês?'));
-  expect(spent?.facts[0]?.statement).toMatch(/Não há despesas de delivery/);
+  expect(spent?.facts[0]?.statement).toMatch(/There are no expenses for delivery/);
 
   const corrected = await handleFinanceChat(books, turn('essa compra foi 24, não 42'));
   expect(presentSkill(corrected!).message).toContain('R$ 24,00');
@@ -53,7 +53,7 @@ test('chat records, queries, corrects and limits without inventing money movemen
   expect((await books.ledger.listBudgets('user-a', 'RIN'))[0]?.currency).toBe('BRL');
 
   const refused = await handleFinanceChat(books, turn('quero investir essa grana na bolsa'));
-  expect(refused?.explanations.join(' ')).toMatch(/Não faço investimento/);
+  expect(refused?.explanations.join(' ')).toMatch(/I do not make investments/);
   expect(await books.ledger.listEntries('user-a', 'RIN')).toHaveLength(2);
 });
 
@@ -82,7 +82,7 @@ test('an ambiguous correction waits and does not change either entry', async () 
     idempotencyKey: 'b',
   });
   const result = await handleFinanceChat(books, turn('essa compra foi 24, não 42'));
-  expect(result?.missing).toContain('qual lançamento');
+  expect(result?.missing).toContain('which entry');
   const open = await books.pending.listOpen('user-a', 'RIN', 'c1', now);
   expect(open).toHaveLength(2);
   const active = (await books.ledger.listEntries('user-a', 'RIN')).filter((entry) => entry.status === 'active');

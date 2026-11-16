@@ -293,18 +293,18 @@ export function fallbackMessage(batch: ReminderBatch): string {
     const item = overdue[0]!;
     const count = Number(item.nagCount ?? 0) + 1;
     if (count >= 5)
-      return `Sério? “${item.reminder.title}” AINDA está pendente. Já passou ${item.overdueMinutes} minutos. Vai resolver isso logo ou marca como cancelado, porque eu não vou fingir que essa porcaria sumiu sozinha.`;
+      return `Seriously? “${item.reminder.title}” is STILL pending. It has been ${item.overdueMinutes} minutes. Get it done or mark it as canceled, because I will not pretend this crap disappeared on its own.`;
     if (count >= 3)
-      return `“${item.reminder.title}” ainda está pendente. Já passou ${item.overdueMinutes} minutos do horário. Vai resolver isso logo e depois me diz que terminou — não me faz cobrar de novo.`;
+      return `“${item.reminder.title}” is still pending. It is ${item.overdueMinutes} minutes overdue. Get it done and tell me when you finish — do not make me nag you again.`;
     if (count >= 2)
-      return `Eu ainda estou esperando você resolver “${item.reminder.title}”. Já passou do horário. Anda, resolve isso e marca como concluído.`;
-    return `O horário de “${item.reminder.title}” já passou e continua pendente. Vai resolver isso agora e me avisa quando terminar.`;
+      return `I am still waiting for you to finish “${item.reminder.title}”. It is overdue. Come on, get it done and mark it as complete.`;
+    return `“${item.reminder.title}” is overdue and still pending. Handle it now and tell me when you finish.`;
   }
   if (upcoming.length === 1 && overdue.length === 0 && unscheduled.length === 0) {
     const item = upcoming[0]!;
     if (item.minutesUntil <= 15)
-      return `Ei. “${item.reminder.title}” é daqui a ${item.minutesUntil || 'poucos'} minutos. Não vem dizer depois que eu não avisei.`;
-    return `Só pra você não esquecer: “${item.reminder.title}” é daqui a cerca de ${item.minutesUntil} minutos.`;
+      return `Hey. “${item.reminder.title}” is in ${item.minutesUntil || 'a few'} minutes. Do not say I did not warn you.`;
+    return `Just so you remember: “${item.reminder.title}” is in about ${item.minutesUntil} minutes.`;
   }
   const titles = [...overdue, ...upcoming, ...unscheduled]
     .map((x) => x.reminder.title)
@@ -312,14 +312,14 @@ export function fallbackMessage(batch: ReminderBatch): string {
     .slice(0, 5)
     .join(', ');
   if (overdue.length)
-    return `Ainda tem coisa atrasada e pendente aqui: ${titles}. Vai resolver isso logo. Eu não quero ter que cobrar de novo.`;
+    return `There are still overdue items here: ${titles}. Get them done. I do not want to nag you again.`;
   if (upcoming.length)
-    return `Tem coisa chegando aí: ${titles}. Dá uma olhada antes que você esqueça e venha culpar o universo.`;
-  return `Já que aparentemente eu tenho que manter isso na sua cabeça também: ${titles}. Vê se resolve hoje.`;
+    return `Some things are coming up: ${titles}. Take a look before you forget and blame the universe.`;
+  return `Since apparently I have to keep this on your mind too: ${titles}. Try to handle it today.`;
 }
 
 /**
- * Build the notification payload. Overdue cobrança maps to the valid SCOLDING
+ * Build the notification payload. Overdue nagging maps to the valid SCOLDING
  * avatar state (the raw handler used 'ANGRY', which is not an Android avatar
  * state and would otherwise be coerced to NEUTRAL, losing the angry intent).
  */

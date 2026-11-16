@@ -1,40 +1,40 @@
-# Política de publicação
+# Publication policy
 
-## Conteúdo permitido
+## Allowed content
 
-Código, contratos, schemas, testes sintéticos, documentação técnica e infraestrutura parametrizada. Os seeds desta edição foram escritos como exemplos fictícios. Os módulos de processamento de assets são código; as imagens e dados de catálogo reais permanecem privados.
+Code, contracts, schemas, synthetic tests, technical documentation and parameterized infrastructure. Seeds in this edition are fictional examples. Asset processing modules are code; actual images and catalog data remain private.
 
-## Conteúdo proibido
+## Prohibited content
 
-- Chaves, tokens, contas de serviço, arquivos `.env`, certificados e keystores.
-- Dados pessoais, conversas, memórias, perfis, relações, localização ou extratos reais.
-- Assets do front ou backend: imagens, áudio, vídeo, fontes, vetores, catálogos operacionais e mídia embutida em texto.
-- Configurações Firebase reais, endpoints de implantação, IDs de contas cloud e URLs assinadas de produção.
-- State/plan Terraform, logs, caches, capturas, builds, binários, arquivos compactados, LFS e submódulos.
-- Histórico, patches não revisados, branches e tags dos repositórios privados.
+- Keys, tokens, service accounts, `.env` files, certificates and keystores.
+- Real personal data, conversations, memories, profiles, relationships, locations or financial statements.
+- Frontend or backend assets: images, audio, video, fonts, vectors, operational catalogs and media embedded in text.
+- Real Firebase settings, deployment endpoints, cloud account IDs and signed production URLs.
+- Terraform state/plans, logs, caches, captures, builds, binaries, archives, LFS and submodules.
+- History, unreviewed patches, branches and tags from private repositories.
 
-## Antes do push
+## Before pushing
 
-Instale Gitleaks 8.30.1 no PATH e ative os hooks locais após clonar:
+Install Gitleaks 8.30.1 on PATH and enable local hooks after cloning:
 
 ```sh
 git config core.hooksPath .githooks
 ```
 
-Os hooks bloqueiam commit/push se o scanner faltar ou detectar violações. Hooks locais não são instalados automaticamente pelo Git em outros clones e podem ser desativados. Esta amostra não possui CI; a revisão e as verificações locais devem ocorrer antes do envio.
+Hooks block commits/pushes if the scanner is missing or detects violations. Git does not install local hooks automatically in other clones, and they can be disabled. This sample has no CI; review and local checks must take place before pushing.
 
-Alternativamente, configure o caminho local do executável com `git config rin.gitleaksPath CAMINHO_DO_EXECUTAVEL`. Esse valor fica apenas na configuração local do Git.
+Alternatively, configure the local executable path with `git config rin.gitleaksPath PATH_TO_EXECUTABLE`. This value stays in the local Git configuration.
 
-1. Trabalhe neste clone público, selecionando alterações técnicas individualmente.
-2. Revise o diff completo, inclusive arquivos novos e fixtures; use dados fictícios.
-3. Execute testes e `npm run test:publication`.
-4. Adicione os arquivos ao index e execute `npm run check:publication` e Gitleaks com redação de resultados.
-5. Revise também título, corpo e comentários de PR: o scanner de arquivos não verifica automaticamente esse texto.
+1. Work in this public clone, selecting technical changes individually.
+2. Review the full diff, including new files and fixtures; use fictional data.
+3. Run tests and `npm run test:publication`.
+4. Stage the files and run `npm run check:publication` and Gitleaks with redacted results.
+5. Review the PR title, body and comments too: the file scanner does not check this text automatically.
 
-O guard inspeciona o conteúdo do index e todas as versões alcançáveis no histórico local. Gitleaks complementa a verificação com regras de credenciais. Nenhum scanner prova ausência absoluta de dados pessoais; revisão humana continua necessária.
+The guard inspects the index and every version reachable in local history. Gitleaks complements it with credential rules. No scanner can prove the complete absence of personal data; human review is still necessary.
 
-Rejeitar um PR não desfaz a exposição de conteúdo que já chegou a um branch público. Nunca use um PR público como área de triagem de material privado. Se houver vazamento, revogue credenciais, contenha o acesso e trate histórico, forks e caches separadamente.
+Rejecting a PR does not undo exposure of content already pushed to a public branch. Never use a public PR to triage private material. If a leak occurs, revoke credentials, contain access and handle history, forks and caches separately.
 
-## Proteções
+## Protections
 
-Não há workflows de CI nem checks remotos obrigatórios. Permanecem as verificações locais de publicação, a proteção da branch e as verificações de segredos do GitHub. Mudanças nessas proteções exigem revisão do mantenedor. Branch protection e push protection são configurações do servidor; os arquivos deste repositório por si só não as ativam.
+There are no CI workflows or required remote checks. Local publication checks, branch protection and GitHub secret checks remain in place. Changes to these protections require maintainer review. Branch protection and push protection are server settings; repository files alone do not enable them.

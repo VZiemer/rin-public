@@ -3,7 +3,7 @@ import type { FinanceBill, FinanceBudget, FinanceEntry } from '../../domain/fina
 import type { AlertPreferences } from '../../domain/finance/alerts.js';
 import type { InitiativeProposal } from '../skills/proactive-engine.js';
 
-const DISCRETE = 'A Rin tem um aviso financeiro para você.';
+const DISCRETE = 'Rin has a financial alert for you.';
 
 export function planFinanceAlerts(input: {
   userId: string;
@@ -68,7 +68,7 @@ export function planFinanceAlerts(input: {
 
 export function lockScreenText(preferences: AlertPreferences): string {
   if (preferences.discretePush) return DISCRETE;
-  return 'A Rin quer falar de um lançamento com você.';
+  return 'Rin wants to discuss an entry with you.';
 }
 
 function proposal(

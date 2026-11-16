@@ -74,7 +74,7 @@ test('selectDueReminders emits unscheduled nudge only inside a slot window', () 
   expect(selection.unscheduled[0]?.slotKey).toBe('2026-01-02#08:00');
 });
 
-test('buildReminderPayload maps overdue cobrança to SCOLDING/HIGH (valid avatar state)', () => {
+test('buildReminderPayload maps overdue nagging to SCOLDING/HIGH (valid avatar state)', () => {
   const overdue = buildReminderPayload('x', {
     upcoming: [],
     overdue: [{ reminder: reminder({}), scheduledAt: 's', overdueMinutes: 40, nagCount: 0 }],

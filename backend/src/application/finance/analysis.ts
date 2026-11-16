@@ -17,44 +17,44 @@ export async function explainFinances(
   if (totals.length === 0 && budgets.length === 0) {
     return {
       skillId: 'finance',
-      facts: [{ id: 'empty', statement: `Não há lançamentos ativos em ${input.period}.` }],
+      facts: [{ id: 'empty', statement: `There are no active entries in ${input.period}.` }],
       calculated: [],
-      explanations: ['Não vou inventar gastos, receitas ou saldo bancário.'],
-      missing: input.askingBalance ? ['saldo informado'] : [],
+      explanations: ['I will not invent expenses, income or bank balances.'],
+      missing: input.askingBalance ? ['reported balance'] : [],
       proposedActions: [],
       tone: { intensity: 'measured', allowSarcasm: true },
     };
   }
   const calculated: SkillResult['calculated'][number][] = [];
   const explanations = [
-    'Os totais saem da soma dos lançamentos ativos. Moedas diferentes não são somadas.',
+    'Totals are the sum of active entries. Different currencies are not added together.',
   ];
   for (const row of totals) {
     calculated.push(
-      { id: `income-${row.currency}`, label: `Receitas em ${row.currency}`, amountMinor: row.incomeMinor, currency: row.currency },
-      { id: `expense-${row.currency}`, label: `Despesas em ${row.currency}`, amountMinor: row.expenseMinor, currency: row.currency },
-      { id: `result-${row.currency}`, label: `Resultado do período em ${row.currency}`, amountMinor: row.resultMinor, currency: row.currency },
+      { id: `income-${row.currency}`, label: `Income in ${row.currency}`, amountMinor: row.incomeMinor, currency: row.currency },
+      { id: `expense-${row.currency}`, label: `Expenses in ${row.currency}`, amountMinor: row.expenseMinor, currency: row.currency },
+      { id: `result-${row.currency}`, label: `Period result in ${row.currency}`, amountMinor: row.resultMinor, currency: row.currency },
     );
     explanations.push(
-      `Resultado em ${row.currency} = receitas menos despesas dos lançamentos ${row.entryIds.join(', ')}.`,
+      `Result in ${row.currency} = income minus expenses from entries ${row.entryIds.join(', ')}.`,
     );
     const snapshot = await ledger.latestBalance(input.userId, input.assistantId, row.currency);
     if (snapshot) {
       calculated.push({
         id: `balance-${row.currency}`,
-        label: `Saldo informado em ${row.currency}`,
+        label: `Reported balance in ${row.currency}`,
         amountMinor: snapshot.amountMinor,
         currency: row.currency,
       });
-      explanations.push(`Saldo informado por você em ${snapshot.reportedAt}. Não consultei banco.`);
+      explanations.push(`Balance reported by you on ${snapshot.reportedAt}. I did not contact a bank.`);
     } else if (input.askingBalance) {
-      explanations.push(`Não há saldo informado em ${row.currency}. Não vou tratar o resultado do período como saldo bancário.`);
+      explanations.push(`No balance was reported in ${row.currency}. I will not treat the period result as a bank balance.`);
     }
     for (const budget of budgets.filter((item) => item.currency === row.currency)) {
       const spent = spentInCategory(entries, budget);
       calculated.push({
         id: `budget-${budget.categoryId}-${budget.currency}`,
-        label: `Orçamento restante de ${budget.categoryId} em ${budget.currency}`,
+        label: `Remaining budget for ${budget.categoryId} in ${budget.currency}`,
         amountMinor: budget.limitMinor - spent,
         currency: budget.currency,
       });
@@ -63,13 +63,13 @@ export async function explainFinances(
   for (const budget of budgets) {
     if (!totals.some((row) => row.currency === budget.currency)) {
       explanations.push(
-        `O orçamento de ${budget.categoryId} está em ${budget.currency} e não foi comparado com outra moeda.`,
+        `The budget for ${budget.categoryId} is in ${budget.currency} and was not compared with another currency.`,
       );
     }
   }
   return {
     skillId: 'finance',
-    facts: [{ id: 'source', statement: 'Os valores abaixo vêm só dos registros ativos do período.' }],
+    facts: [{ id: 'source', statement: 'The amounts below come only from active entries for the period.' }],
     calculated,
     explanations,
     missing: [],

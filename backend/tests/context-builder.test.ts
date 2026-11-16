@@ -74,7 +74,7 @@ test('new user without seeded profile, relationship or routine gets neutral defa
     get: async () => ({ currentTime: '2026-01-01T00:00:00Z', timezone: 'UTC' }),
   });
   const context = await builder.build('new-user', 'c', 'YUI');
-  expect(context.profile).toMatchObject({ userId: 'new-user', primaryLanguage: 'pt-BR' });
+  expect(context.profile).toMatchObject({ userId: 'new-user', primaryLanguage: 'en-US' });
   expect(context.relationship).toMatchObject({ userId: 'new-user', assistant: 'YUI' });
   expect(context.relationship.relationship.join(' ')).toContain('New user');
   expect(context.routine).toMatchObject({ userId: 'new-user', weekdayPatterns: [] });

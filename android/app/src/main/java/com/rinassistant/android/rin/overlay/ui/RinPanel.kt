@@ -130,11 +130,11 @@ private data class QuickActionSpec(
 
 private val QuickActions = listOf(
     QuickActionSpec(AssistantQuickAction.IMPORT_STATEMENT, Icons.Filled.AttachFile, Color(0xFF14B8A6), ""),
-    QuickActionSpec(AssistantQuickAction.SET_ALARM, Icons.Filled.Alarm, Color(0xFF6366F1), "Definir alarme"),
-    QuickActionSpec(AssistantQuickAction.START_POMODORO, Icons.Filled.Timer, Color(0xFFE0457B), "Iniciar Pomodoro"),
-    QuickActionSpec(AssistantQuickAction.TODAYS_TASKS, Icons.Filled.Checklist, Color(0xFF16A34A), "Tarefas de hoje"),
-    QuickActionSpec(AssistantQuickAction.ADD_REMINDER, Icons.Filled.Add, Color(0xFFF59E0B), "Adicionar lembrete"),
-    QuickActionSpec(AssistantQuickAction.SETTINGS, Icons.Filled.Settings, Color(0xFF3B82F6), "Configurações"),
+    QuickActionSpec(AssistantQuickAction.SET_ALARM, Icons.Filled.Alarm, Color(0xFF6366F1), "Set alarm"),
+    QuickActionSpec(AssistantQuickAction.START_POMODORO, Icons.Filled.Timer, Color(0xFFE0457B), "Start Pomodoro"),
+    QuickActionSpec(AssistantQuickAction.TODAYS_TASKS, Icons.Filled.Checklist, Color(0xFF16A34A), "Today’s tasks"),
+    QuickActionSpec(AssistantQuickAction.ADD_REMINDER, Icons.Filled.Add, Color(0xFFF59E0B), "Add reminder"),
+    QuickActionSpec(AssistantQuickAction.SETTINGS, Icons.Filled.Settings, Color(0xFF3B82F6), "Settings"),
 )
 
 @Composable

@@ -1,15 +1,15 @@
-## Alteração técnica
+## Technical change
 
-Descreva o problema e o comportamento resultante usando exemplos fictícios.
+Describe the problem and resulting behavior using fictional examples.
 
-## Verificação antes do push
+## Before pushing
 
-- [ ] Revisei todos os arquivos e commits, inclusive fixtures e documentos.
-- [ ] Não incluí assets, mídia embutida, dados pessoais, credenciais ou configurações reais.
-- [ ] Não importei histórico do projeto privado.
-- [ ] Executei o guard de publicação, Gitleaks e os testes aplicáveis.
-- [ ] O título, corpo e evidências deste PR também não contêm dados privados.
+- [ ] I reviewed every file and commit, including fixtures and documentation.
+- [ ] I included no assets, embedded media, personal data, credentials or real configuration.
+- [ ] I did not import history from the private project.
+- [ ] I ran the publication guard, Gitleaks and applicable tests.
+- [ ] The title, body and evidence in this PR contain no private data either.
 
-## Validação
+## Validation
 
-Informe comandos e resultados, sem copiar logs de produção.
+List commands and results without copying production logs.

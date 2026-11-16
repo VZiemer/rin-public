@@ -16,3 +16,9 @@ test('venting does not create tasks and risk points to human help', () => {
   expect(risk.message).not.toMatch(/psic[oó]log|diagn[oó]stico|s[oó] precisa de mim/i);
   expect(supportTextAllowed('você só precisa de mim, se afasta deles')).toBe(false);
 });
+
+test('English support preserves listening, crisis priority and dependency boundaries', () => {
+  expect(supportReply('I just want to vent').facts[0]?.id).toBe('vent');
+  expect(presentSkill(supportReply('I want to die')).priority).toBe('HIGH');
+  expect(supportTextAllowed('You only need me; stay away from them')).toBe(false);
+});

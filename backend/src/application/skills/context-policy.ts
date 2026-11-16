@@ -8,8 +8,8 @@ import {
   type SkillDomain,
 } from '../../domain/skills/domain-record.js';
 
-const EMOTIONAL = /desesper|ansied|triste|desabaf|chorand|angusti|panico|nao aguento/i;
-const MONEY = /r\$\s?\d|\d+\s?reais|\b\d+[.,]\d{2}\b/gi;
+const EMOTIONAL = /desperate|anxious|anxiety|\bsad\b|\bvent(?:ed|ing)?\b|crying|distress|panic|desesper|ansied|triste|desabaf|chorand|angusti|panico|nao aguento/i;
+const MONEY = /(?:r\$|\$|USD|BRL|EUR)\s?\d[\d.,]*|\d+(?:[.,]\d+)?\s?(?:reais|dollars|euros)|\b\d+[.,]\d{2}\b/gi;
 
 export function prepareDomainRecord(record: DomainRecord): DomainRecord {
   if (!emotionalPermanentAllowed(record)) throw new AppError('consent_required', 409);
@@ -51,7 +51,7 @@ export function projectSkillContext(input: {
     const sensitive =
       summary &&
       (EMOTIONAL.test(summary) ||
-        /r\$|\breais\b|or[cç]amento|sal[aá]rio|fatura|boleto|terapia|psic[oó]log/i.test(summary));
+        /r\$|\breais\b|budget|salary|invoice|debt|therapy|psycholog|or[cç]amento|sal[aá]rio|fatura|boleto|terapia|psic[oó]log/i.test(summary));
     return {
       skillId: 'flirt',
       records: [],
@@ -109,13 +109,13 @@ export function projectRecentTurns(input: {
 function minimizeFinanceSummary(summary: string | null): string | null {
   if (!summary) return null;
   if (EMOTIONAL.test(summary)) {
-    return 'Continuidade da conversa preservada. Detalhes emocionais ficam fora deste módulo.';
+    return 'Conversation continuity preserved. Emotional details stay outside this module.';
   }
   return redactMoney(summary) === summary ? summary : redactMoney(summary);
 }
 
 function redactMoney(text: string): string {
-  return text.replace(MONEY, '[valor]');
+  return text.replace(MONEY, '[amount]');
 }
 
 function expired(record: DomainRecord, now: Date): boolean {

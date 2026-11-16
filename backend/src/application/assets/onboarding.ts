@@ -160,7 +160,7 @@ export class AssetContextChat {
     if (!record) {
       // Multiple uploads must never assign an unnamed answer to an arbitrary image.
       return reply(
-        `Tenho mais de uma imagem pendente. Inclua o nome da imagem na resposta: ${open
+        `There is more than one pending image. Include the image name in your reply: ${open
           .slice(0, 10)
           .map((r) => r.image.id)
           .join(', ')}.`,
@@ -169,7 +169,7 @@ export class AssetContextChat {
     if (record.status === 'ready') return this.publish(record);
     if (message.length > 2000)
       return reply(
-        `Pode resumir as regras de "${record.image.id}" em até 2000 caracteres?`,
+        `Can you summarize the rules for "${record.image.id}" in up to 2000 characters?`,
         record.image.id,
       );
     let decision;
@@ -177,7 +177,7 @@ export class AssetContextChat {
       decision = assetUsageDecisionSchema.parse(await this.deps.analyzer.analyze(record, message));
     } catch {
       return reply(
-        `Não consegui interpretar as regras de "${record.image.id}". Pode explicar a ocasião e os horários ou datas?`,
+        `I could not interpret the rules for "${record.image.id}". Can you explain the occasion and times or dates?`,
         record.image.id,
       );
     }
@@ -194,7 +194,7 @@ export class AssetContextChat {
     };
     if (!(await this.deps.records.save(next, record.revision)))
       return reply(
-        'O cadastro da imagem mudou enquanto você respondia. Envie sua resposta novamente.',
+        'The image registration changed while you were replying. Send your answer again.',
       );
     if (decision.status === 'clarify')
       return reply(`Sobre "${record.image.id}": ${question}`, record.image.id);
@@ -257,7 +257,7 @@ export class AssetContextChat {
     };
     await this.deps.records.save(completed, record.revision);
     return reply(
-      `Salvei o contexto e as regras de "${image.id}" para usar no futuro: ${record.usage.useCase}`,
+      `I saved the context and rules for "${image.id}" for future use: ${record.usage.useCase}`,
     );
   }
 }

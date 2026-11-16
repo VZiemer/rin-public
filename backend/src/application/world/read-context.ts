@@ -68,7 +68,7 @@ export function worldContextTool(reader: ReadWorldContext) {
   return defineTool({
     name: 'get_world_context',
     description:
-      'Read cached daily headlines, weather or USD/BRL from the user world context in DynamoDB. Use for questions such as "o que está rolando hoje na política?". Filters by topic and freshness; includes source URLs and publication/observation times. Never searches the web or refreshes external sources. News already mentioned still appear when explicitly requested.',
+      'Read cached daily headlines, weather or USD/BRL from the user world context in DynamoDB. Use for questions such as "what is happening in politics today?". Filters by topic and freshness; includes source URLs and publication/observation times. Never searches the web or refreshes external sources. News already mentioned still appear when explicitly requested.',
     risk: 'READ',
     inputSchema,
     execute: (input, context) => reader.execute(context.userId, input),

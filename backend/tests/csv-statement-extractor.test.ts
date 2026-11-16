@@ -79,7 +79,7 @@ test('extracts the Nubank signed layout and preserves only genuine identifiers',
     { amountMinor: 10000, kind: 'income', externalId: 'synthetic-2' },
   ]);
   expect(result.warnings).toEqual([
-    'Moeda ausente no CSV: BRL foi assumido; confira a moeda antes de confirmar.',
+    'Currency missing from CSV: BRL was assumed; check the currency before confirming.',
   ]);
 });
 
@@ -168,7 +168,7 @@ test('supports C suffix and signed income while reconciling stated direction', a
   expect((await parse(csvWith('+0,29', 'Entrada'))).rows[0]?.amountMinor).toBe(29);
   const conflict = await parse(csvWith('-12,34', 'Entrada'));
   expect(conflict.rows[0]?.kind).toBe('unknown');
-  expect(conflict.warnings.join(' ')).toContain('conflito');
+  expect(conflict.warnings.join(' ')).toContain('conflicts');
 });
 
 test('uses consistent decimal evidence before accepting a single thousands separator', async () => {

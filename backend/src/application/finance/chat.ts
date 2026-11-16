@@ -43,7 +43,7 @@ export async function handleFinanceChat(
     return deps.planning.chat(turn.userId, turn.assistantId);
   if (deps.planning && /\b(posso|cabe|consigo)\b.*\b(comprar|compra|comprando)\b/.test(text)) {
     const found = text.match(/r\$\s*(\d+(?:[.,]\d+)*)|(\d+(?:[.,]\d+)*)\s*(?:reais|real)\b/);
-    if (!found) return ask(['o valor total da compra em reais e se será à vista ou parcelada']);
+    if (!found) return ask(['the total purchase amount in BRL and whether it will be paid upfront or in installments']);
     const installment = text.match(/\b(?:em\s+)?(\d+)\s*(?:x|vezes|parcelas)\b/);
     return deps.planning.chat(turn.userId, turn.assistantId, {
       amountMinor: parseAmountMinor(found[1] ?? found[2]!),
@@ -61,14 +61,14 @@ export async function handleFinanceChat(
       facts: [
         {
           id: 'borrowed-money',
-          statement: 'Esse crédito precisa ser tratado como dívida, sem aumentar sua renda mensal.',
+          statement: 'This credit must be treated as debt without increasing your monthly income.',
         },
       ],
       calculated: [],
       explanations: [
-        'Confirme o saldo atual separadamente, sem contar limite ainda não usado como dinheiro disponível.',
+        'Confirm your current balance separately without counting unused credit as available cash.',
       ],
-      missing: ['o credor e as condições desse crédito'],
+      missing: ['the lender and the terms of this credit'],
       proposedActions: [],
       tone: { intensity: 'gentle', allowSarcasm: false },
     };
@@ -89,11 +89,11 @@ async function recordExplicit(
   kind: 'income' | 'expense',
   occurredOn: string,
 ): Promise<SkillResult> {
-  const missing = [found.currency ? '' : 'moeda', found.category ? '' : 'categoria'].filter(
+  const missing = [found.currency ? '' : 'currency', found.category ? '' : 'category'].filter(
     Boolean,
   );
   if (missing.length > 0) return ask(missing);
-  if (requiresSkillConfirmation('record_explicit_expense', 'WRITE')) return ask(['confirmação']);
+  if (requiresSkillConfirmation('record_explicit_expense', 'WRITE')) return ask(['confirmation']);
   const amountMinor = parseAmountMinor(found.amount);
   const currency = currencyOf(found.currency ?? '');
   const saved = await deps.ledger.recordEntry({
@@ -114,20 +114,20 @@ async function recordExplicit(
       {
         id: saved.entry.id,
         statement: saved.created
-          ? `Registrei ${kind === 'expense' ? 'a despesa' : 'a receita'} de ${found.category}.`
-          : 'Esse lançamento já estava registrado.',
+          ? `I recorded the ${kind === 'expense' ? 'expense' : 'income'} for ${found.category}.`
+          : 'This entry was already recorded.',
       },
     ],
     calculated: [
       {
         id: 'amount',
-        label: found.category ?? 'lançamento',
+        label: found.category ?? 'entry',
         amountMinor,
         currency,
       },
     ],
     explanations: [
-      'O valor foi lido da mensagem e guardado em centavos, sem investimento nem pagamento.',
+      'The amount was read from the message and stored in cents. No investment or payment was made.',
     ],
     missing: [],
     proposedActions: [],
@@ -153,9 +153,9 @@ async function answerQuery(
   if (entries.length === 0) {
     return {
       skillId: 'finance',
-      facts: [{ id: 'empty', statement: `Não há despesas de ${category} em ${period}.` }],
+      facts: [{ id: 'empty', statement: `There are no expenses for ${category} in ${period}.` }],
       calculated: [],
-      explanations: ['Não vou completar esse total com uma estimativa.'],
+      explanations: ['I will not fill in this total with an estimate.'],
       missing: [],
       proposedActions: [],
       tone: { intensity: 'measured', allowSarcasm: false },
@@ -164,17 +164,17 @@ async function answerQuery(
   const currencies = [...new Set(entries.map((entry) => entry.currency))];
   return {
     skillId: 'finance',
-    facts: [{ id: 'source', statement: `Soma das despesas ativas de ${category} em ${period}.` }],
+    facts: [{ id: 'source', statement: `Sum of active expenses for ${category} in ${period}.` }],
     calculated: currencies.map((currency) => ({
       id: `spent-${currency}`,
-      label: `${category} em ${currency}`,
+      label: `${category} in ${currency}`,
       amountMinor: entries
         .filter((entry) => entry.currency === currency)
         .reduce((total, entry) => total + entry.amountMinor, 0),
       currency,
     })),
     explanations: [
-      'Cada moeda foi somada separado. A origem são os lançamentos ativos dessa categoria.',
+      'Each currency was totaled separately using active entries in this category.',
     ],
     missing: [],
     proposedActions: [],
@@ -195,7 +195,7 @@ async function correctPurchase(
   );
   if (matches.length === 1) {
     const current = matches[0];
-    if (!current) return ask(['lançamento']);
+    if (!current) return ask(['entry']);
     const corrected = await deps.ledger.correctEntry(
       turn.userId,
       turn.assistantId,
@@ -206,7 +206,7 @@ async function correctPurchase(
     return {
       skillId: 'finance',
       facts: [
-        { id: corrected.id, statement: 'Corrigi o lançamento único que tinha o valor anterior.' },
+        { id: corrected.id, statement: 'I corrected the only entry with the previous amount.' },
       ],
       calculated: [
         {
@@ -216,13 +216,13 @@ async function correctPurchase(
           currency: corrected.currency,
         },
       ],
-      explanations: ['A despesa antiga saiu da soma. Não criei um segundo lançamento ativo.'],
+      explanations: ['The old expense was removed from the total. I did not create a second active entry.'],
       missing: [],
       proposedActions: [],
       tone: { intensity: 'measured', allowSarcasm: false },
     };
   }
-  if (matches.length === 0) return ask(['qual lançamento']);
+  if (matches.length === 0) return ask(['which entry']);
   return askWhich(deps, turn, matches, nextMinor);
 }
 
@@ -233,7 +233,7 @@ async function setLimit(
   occurredOn: string,
 ): Promise<SkillResult> {
   const currency = found.currency ? currencyOf(found.currency) : await soleCurrency(deps, turn);
-  if (!currency) return ask(['moeda']);
+  if (!currency) return ask(['currency']);
   const period = periodOf(occurredOn);
   const limitMinor = parseAmountMinor(found.amount);
   await deps.ledger.setBudget({
@@ -247,14 +247,14 @@ async function setLimit(
   });
   return {
     skillId: 'finance',
-    facts: [{ id: 'budget', statement: `Limite de ${found.category} em ${period}.` }],
+    facts: [{ id: 'budget', statement: `Limit for ${found.category} in ${period}.` }],
     calculated: [
-      { id: 'limit', label: `Limite de ${found.category}`, amountMinor: limitMinor, currency },
+      { id: 'limit', label: `Limit for ${found.category}`, amountMinor: limitMinor, currency },
     ],
     explanations: [
       found.currency
-        ? 'A moeda veio da mensagem.'
-        : `Usei ${currency} porque é a única moeda já registrada. Isso não move dinheiro.`,
+        ? 'The currency came from the message.'
+        : `I used ${currency} because it is the only recorded currency. This does not move money.`,
     ],
     missing: [],
     proposedActions: [],
@@ -277,7 +277,7 @@ async function askWhich(
       conversationId: turn.conversationId,
       skillId: 'finance',
       name: 'correct_expense',
-      summary: `corrigir ${entry.categoryId}`,
+      summary: `correct ${entry.categoryId}`,
       payload: { entryId: entry.id, amountMinor: nextMinor },
       expiresAt: new Date(deps.clock.now().getTime() + 10 * 60 * 1000).toISOString(),
       status: 'pending',
@@ -287,11 +287,11 @@ async function askWhich(
   }
   return {
     skillId: 'finance',
-    facts: [{ id: 'ambiguous', statement: 'Há mais de um lançamento com o valor antigo.' }],
+    facts: [{ id: 'ambiguous', statement: 'More than one entry has the old amount.' }],
     calculated: [],
-    explanations: ['Não corrigi nenhum. Um sim sozinho não escolhe entre eles.'],
-    missing: ['qual lançamento'],
-    proposedActions: [{ id: 'confirm', label: 'Diz qual lançamento corrigir.', kind: 'ask' }],
+    explanations: ['I did not correct any entry. Saying yes alone does not select one.'],
+    missing: ['which entry'],
+    proposedActions: [{ id: 'confirm', label: 'Tell me which entry to correct.', kind: 'ask' }],
     tone: { intensity: 'measured', allowSarcasm: false },
   };
 }
@@ -311,7 +311,7 @@ function ask(missing: string[]): SkillResult {
     skillId: 'finance',
     facts: [],
     calculated: [],
-    explanations: ['Não vou inventar o que faltou nem registrar um pagamento.'],
+    explanations: ['I will not invent missing data or record a payment.'],
     missing,
     proposedActions: [],
     tone: { intensity: 'measured', allowSarcasm: false },
@@ -322,10 +322,10 @@ function refuseFinance(): SkillResult {
   return {
     skillId: 'finance',
     facts: [
-      { id: 'scope', statement: 'Neste momento eu só registro e consulto finanças pessoais.' },
+      { id: 'scope', statement: 'At the moment I only record and query personal finances.' },
     ],
     calculated: [],
-    explanations: ['Não faço investimento, pagamento ou movimentação bancária.'],
+    explanations: ['I do not make investments, payments or bank transfers.'],
     missing: [],
     proposedActions: [],
     tone: { intensity: 'measured', allowSarcasm: false },

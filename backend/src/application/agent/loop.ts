@@ -56,7 +56,7 @@ export class AgentLoop {
           const id = await this.confirmations.request(call, context);
           this.log.event('confirmation_required', { toolName: tool.name, toolRisk: tool.risk });
           return {
-            message: 'Confirme a ação para continuar.',
+            message: 'Confirm the action to continue.',
             avatarState: 'SCOLDING' as const,
             priority: 'NORMAL' as const,
             actions: [

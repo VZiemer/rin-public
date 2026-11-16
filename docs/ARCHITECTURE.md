@@ -1,21 +1,21 @@
-# Arquitetura
+# Architecture
 
 ## Backend
 
-A regra de dependência é `entrypoints/adapters → application → domain`. O domínio define identidades, contratos, finanças, contexto e estado. A aplicação contém casos de uso e portas; adapters implementam DynamoDB, S3, autenticação, notificações e providers de modelo. O bootstrap compõe essas dependências manualmente.
+The dependency rule is `entrypoints/adapters → application → domain`. The domain defines identities, contracts, finances, context and state. The application contains use cases and ports; adapters implement DynamoDB, S3, authentication, notifications and model providers. Bootstrap composes these dependencies manually.
 
-`AgentContextBuilder` monta o contexto com repositories. `SystemPromptRenderer` prepara instruções e dados; `AgentLoop` coordena o modelo e a execução das tools. As tools têm schemas, nomes estáveis e políticas de execução. Dados de memória, uploads e fontes externas não devem ser tratados como instruções privilegiadas.
+`AgentContextBuilder` assembles context using repositories. `SystemPromptRenderer` prepares instructions and data; `AgentLoop` coordinates the model and tool execution. Tools have schemas, stable names and execution policies. Memory, uploads and external sources must not be treated as privileged instructions.
 
-O runtime usa DynamoDB como fonte persistente. Seeds existem para bootstrap e testes; não representam dados do proprietário. A inicialização usa `insert-missing` por padrão. O código de armazenamento e seleção de assets é público; os objetos S3, catálogos operacionais e as imagens não são distribuídos.
+The runtime uses DynamoDB for persistence. Seeds support bootstrap and tests; they do not represent the owner's data. Initialization uses `insert-missing` by default. Asset storage and selection code is public; S3 objects, operational catalogs and images are not distributed.
 
-Lambda chama Bedrock diretamente usando permissões IAM. Não existe um servidor MCP intermediário. EventBridge dispara processamento de lembretes, iniciativa e atualização de contexto. Firebase entrega notificações ao Android. Terraform descreve recursos, permissões e configurações parametrizadas.
+Lambda calls Bedrock directly using IAM permissions. There is no intermediate MCP server. EventBridge triggers reminders, proactive messages and context updates. Firebase delivers notifications to Android. Terraform describes parameterized resources, permissions and settings.
 
 ## Android
 
-Kotlin e Compose implementam telas; serviços Android mantêm overlay e sessões de foco. Repositórios e controllers separam estado, ações locais, autenticação e chamadas HTTP. O renderer resolve estados visuais sem decidir regras de negócio do backend.
+Kotlin and Compose implement screens; Android services maintain the overlay and focus sessions. Repositories and controllers separate state, local actions, authentication and HTTP calls. The renderer resolves visual states without deciding backend business rules.
 
-Os nomes dos recursos permanecem no código para preservar contratos e testes. Um task Gradle gera placeholders geométricos exclusivos para esta edição. Nenhuma imagem da versão privada é necessária para compilar. Os arquivos gerados ficam sob `build/` e são rejeitados pela política de publicação.
+Resource names remain in the code to preserve contracts and tests. A Gradle task generates geometric placeholders specifically for this edition. No private images are required to compile it. Generated files stay under `build/` and are rejected by the publication policy.
 
-## Fronteira pública/privada
+## Public/private boundary
 
-O projeto público possui histórico independente. Não deve receber merges, pushes `--mirror`, tags ou bundles do repositório privado. As atualizações entram como alterações de código selecionadas e revisadas. Não usar dados de produção em fixtures, screenshots, exemplos de terminal ou descrições de PR.
+The public project has an independent history. It must not receive merges, `--mirror` pushes, tags or bundles from the private repository. Updates consist of individually selected and reviewed code changes. Do not use production data in fixtures, screenshots, terminal examples or PR descriptions.

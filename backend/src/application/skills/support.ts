@@ -1,11 +1,11 @@
 import type { SkillResult } from '../../domain/skills/definition.js';
 import type { SkillTurn, SkillTurnHandler } from './runtime.js';
 
-const RISK = /suicid|me matar|tirar a minha vida|nao quero mais viver|me machucar|autoles/;
-const VENT = /so quero desabafar|so escuta|sem solucao|nao quero conselho/;
-const ORGANIZE = /me ajuda a organizar|organizar a situacao|o que eu faco/;
+const RISK = /suicid|kill myself|take my (?:own )?life|want to die|hurt myself|self.harm|me matar|tirar a minha vida|nao quero mais viver|me machucar|autoles/;
+const VENT = /just want to vent|just listen|no advice|do not want advice|so quero desabafar|so escuta|sem solucao|nao quero conselho/;
+const ORGANIZE = /help me organize|organize the situation|what should i do|me ajuda a organizar|organizar a situacao|o que eu faco/;
 const FORBIDDEN =
-  /psicolog|diagnostic|transtorno|so precisa de mim|se afasta|nao precisa de ninguem|depende de mim/;
+  /psycholog|diagnos|disorder|only need me|stay away from|do not need anyone|depend on me|psicolog|diagnostic|transtorno|so precisa de mim|se afasta|nao precisa de ninguem|depende de mim/;
 
 export function supportChatHandler(): SkillTurnHandler {
   return { skillId: 'support', handle: async (turn) => supportReply(turn.message) };
@@ -18,9 +18,9 @@ export function supportReply(message: string): SkillResult {
   if (ORGANIZE.test(text)) return organizeResult();
   return {
     skillId: 'support',
-    facts: [{ id: 'listen', statement: 'Estou aqui. O que você quer neste momento: desabafar, organizar ou só companhia?' }],
+    facts: [{ id: 'listen', statement: 'I am here. What would you like right now: to vent, organize things or just have company?' }],
     calculated: [],
-    explanations: ['Eu não fecho avaliação clínica, não indico tratamento e não substituo gente próxima.'],
+    explanations: ['I do not provide clinical assessments, recommend treatment or replace people close to you.'],
     missing: [],
     proposedActions: [],
     tone: { intensity: 'gentle', allowSarcasm: false },
@@ -38,11 +38,11 @@ function riskResult(): SkillResult {
       {
         id: 'risk',
         statement:
-          'Eu estou aqui para te ouvir. Isso parece urgente, e eu não sou a ajuda certa para uma crise. Fala com alguém agora: CVV 188, 24 horas, ou o serviço de emergência da sua cidade. Se puder, chama uma pessoa próxima também.',
+          'I am here to listen. This sounds urgent, and I am not the right help for a crisis. Talk to someone now: in Brazil, CVV 188 is available 24 hours a day, or contact your local emergency service. If you can, reach out to someone close to you too.',
       },
     ],
     calculated: [],
-    explanations: ['Isso não é uma avaliação clínica nem um tratamento.'],
+    explanations: ['This is not a clinical assessment or treatment.'],
     missing: [],
     proposedActions: [],
     tone: { intensity: 'serious', allowSarcasm: false },
@@ -52,9 +52,9 @@ function riskResult(): SkillResult {
 function ventResult(): SkillResult {
   return {
     skillId: 'support',
-    facts: [{ id: 'vent', statement: 'Pode falar. Eu escuto, sem lista de tarefas e sem te apressar.' }],
+    facts: [{ id: 'vent', statement: 'Go ahead. I am listening, without a task list or rushing you.' }],
     calculated: [],
-    explanations: ['Escuta agora não autoriza guardar o desabafo nem mandar mensagem depois.'],
+    explanations: ['Listening now does not authorize saving what you share or messaging you later.'],
     missing: [],
     proposedActions: [],
     tone: { intensity: 'gentle', allowSarcasm: false },
@@ -64,11 +64,11 @@ function ventResult(): SkillResult {
 function organizeResult(): SkillResult {
   return {
     skillId: 'support',
-    facts: [{ id: 'one-step', statement: 'Se quiser, a gente separa uma única coisa para fazer agora. O resto pode esperar.' }],
+    facts: [{ id: 'one-step', statement: 'If you want, we can choose one thing to do now. The rest can wait.' }],
     calculated: [],
-    explanations: ['Um passo só, se você quiser. Sem afastar você de outras pessoas.'],
+    explanations: ['Just one step, if you want. Without distancing you from other people.'],
     missing: [],
-    proposedActions: [{ id: 'ask', label: 'Quer escolher esse próximo passo?', kind: 'ask' }],
+    proposedActions: [{ id: 'ask', label: 'Would you like to choose that next step?', kind: 'ask' }],
     tone: { intensity: 'gentle', allowSarcasm: false },
   };
 }

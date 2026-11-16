@@ -105,7 +105,7 @@ test('delivered spontaneous message and recommendation details reach Rin in a ne
   const prompt = new SystemPromptRenderer().render(context);
   expect(prompt).toContain(message);
   expect(prompt).toContain('O Hobbit');
-  expect(prompt).toContain('qual livro?');
+  expect(prompt).toContain('which book?');
   const query = f.send.mock.calls.find(([command]) => command instanceof QueryCommand)?.[0];
   expect(query?.input).toMatchObject({
     ScanIndexForward: false,

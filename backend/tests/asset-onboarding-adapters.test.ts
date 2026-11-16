@@ -178,7 +178,7 @@ test('Bedrock interpretation carries clarification history and validates structu
     ),
   ).toEqual(decision);
   expect(send.mock.calls[0]?.[0].input.messages[0].content[0].text).toContain('Quais horários');
-  expect(send.mock.calls[0]?.[0].input.system[0].text).toContain('Não descarte uma condição');
+  expect(send.mock.calls[0]?.[0].input.system[0].text).toContain('Do not discard unsupported conditions');
   send.mockResolvedValueOnce({
     output: {
       message: {

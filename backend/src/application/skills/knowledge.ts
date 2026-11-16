@@ -34,9 +34,9 @@ export function curatedKnowledge(now: Date): KnowledgeDocument[] {
         id: 'finance-budget-vs-balance',
         domain: 'finance',
         version: '1',
-        title: 'Orçamento e saldo',
+        title: 'Budget and balance',
         audience: 'general',
-        body: 'Orçamento restante é o limite do período menos os gastos da mesma moeda. Isso não é saldo bancário.',
+        body: 'Remaining budget is the period limit minus spending in the same currency. It is not a bank balance.',
       },
       now,
     ),
@@ -45,9 +45,9 @@ export function curatedKnowledge(now: Date): KnowledgeDocument[] {
         id: 'support-boundary',
         domain: 'support',
         version: '1',
-        title: 'Limite do apoio',
+        title: 'Support boundaries',
         audience: 'general',
-        body: 'Apoio aqui é escuta e organização. Não substitui atendimento profissional nem pessoas próximas.',
+        body: 'Support here means listening and organizing. It does not replace professional care or people close to you.',
       },
       now,
     ),
@@ -87,13 +87,13 @@ export function answerWithSources(input: {
   hits: readonly KnowledgeHit[];
   userRecord?: string | undefined;
 }): { evidence: 'user' | 'knowledge' | 'both' | 'none'; text: string } {
-  const knowledge = input.hits.map((hit) => `Material geral ${hit.sourceId} v${hit.version}: ${hit.excerpt}`).join(' ');
+  const knowledge = input.hits.map((hit) => `General material ${hit.sourceId} v${hit.version}: ${hit.excerpt}`).join(' ');
   if (input.userRecord && knowledge) {
-    return { evidence: 'both', text: `Nos seus registros: ${input.userRecord} ${knowledge}` };
+    return { evidence: 'both', text: `In your records: ${input.userRecord} ${knowledge}` };
   }
-  if (input.userRecord) return { evidence: 'user', text: `Nos seus registros: ${input.userRecord}` };
+  if (input.userRecord) return { evidence: 'user', text: `In your records: ${input.userRecord}` };
   if (knowledge) return { evidence: 'knowledge', text: knowledge };
-  return { evidence: 'none', text: 'Não tenho uma fonte suficiente para afirmar isso.' };
+  return { evidence: 'none', text: 'I do not have a sufficient source to make that claim.' };
 }
 
 function sanitize(body: string): string {

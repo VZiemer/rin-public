@@ -94,17 +94,17 @@ export function calculatePlan(
     : [...new Set(parsed.error.issues.map((i) => String(i.path[0])))];
   if (!parsed.success) return { status: 'needs_input' as const, missing };
   const p = parsed.data;
-  if (p.asOfOn !== today) missing.push('saldo atualizado de hoje');
-  if (p.nextIncomeOn <= today) missing.push('data futura da próxima entrada');
-  if (!p.incomeCertain) missing.push('renda confirmada para assumir parcelas');
-  if (!p.billsReviewed) missing.push('revisão das contas e parcelas pendentes');
-  if (!p.debtsReviewed) missing.push('revisão das dívidas e acordos');
+  if (p.asOfOn !== today) missing.push('an updated balance for today');
+  if (p.nextIncomeOn <= today) missing.push('a future date for the next income');
+  if (!p.incomeCertain) missing.push('confirmed income before committing to installments');
+  if (!p.billsReviewed) missing.push('a review of outstanding bills and installments');
+  if (!p.debtsReviewed) missing.push('a review of debts and agreements');
   const active = debts.filter((d) => d.status === 'active' && d.balanceMinor > 0);
   if (active.some((d) => (d.monthlyPaymentMinor ?? 0) > 0 && !d.nextPaymentOn))
-    missing.push('vencimento dos acordos');
+    missing.push('agreement due dates');
   // An unknown agreement amount cannot be assumed to be zero.
   if (active.some((d) => d.monthlyPaymentMinor === null))
-    missing.push('valor mensal de cada acordo (zero se ainda não há acordo)');
+    missing.push('the monthly amount of each agreement (zero if there is no agreement yet)');
   if (
     active.some(
       (d) =>
@@ -118,7 +118,7 @@ export function calculatePlan(
         ),
     )
   )
-    missing.push('próximo vencimento dos acordos cuja última parcela já foi paga');
+    missing.push('the next due date for agreements whose latest installment was already paid');
   const open = bills.filter((b) => b.status === 'open');
   if (
     bills.some(
@@ -128,7 +128,7 @@ export function calculatePlan(
         (b.status === 'open' || b.dueOn.slice(0, 7) === today.slice(0, 7)),
     )
   )
-    missing.push('tratamento separado das contas em outra moeda');
+    missing.push('separate handling of bills in another currency');
   if (missing.length) return { status: 'needs_input' as const, missing };
   const due = open.filter((b) => b.dueOn <= p.nextIncomeOn);
   const coveredDebtIds = new Set(
@@ -187,7 +187,7 @@ export function calculatePlan(
   )
     return {
       status: 'needs_input' as const,
-      missing: ['valores agregados dentro do limite de cálculo em centavos'],
+      missing: ['aggregate amounts within the calculation limit in cents'],
     };
   const knownRates = active
     .filter((d) => d.monthlyInterestBps !== null)
@@ -217,13 +217,13 @@ export function calculatePlan(
     debtBalanceMinor,
     forecast: p.forecast ?? [],
     warnings: [
-      'Baseado no saldo e compromissos revisados; saldo e despesas já realizadas não são somados novamente.',
-      'Despesas essenciais informadas devem excluir contas e parcelas já cadastradas. Inclua todas as parcelas futuras na revisão.',
-      'A verba de lazer é planejada, não uma garantia de sobra; em déficit, o plano precisa de ajuste.',
+      'Based on the reviewed balance and commitments; the balance and past expenses are not added again.',
+      'Reported essential expenses must exclude recorded bills and installments. Include all future installments in the review.',
+      'The leisure allowance is a plan, not a guaranteed surplus; a deficit requires adjusting the plan.',
       ...(active.some((d) => d.essentialRisk)
-        ? ['Há dívida com risco para uma necessidade essencial: revisar prioridade de negociação.']
+        ? ['A debt puts an essential need at risk: review negotiation priorities.']
         : []),
-      ...(days > 45 ? ['A próxima renda está a mais de 45 dias; revise essa data.'] : []),
+      ...(days > 45 ? ['The next income is more than 45 days away; review this date.'] : []),
     ],
   };
 }
@@ -232,12 +232,12 @@ export function assessPurchase(plan: FinancialPlan, input: Purchase) {
   if (plan.status === 'needs_input')
     return { decision: 'needs_input' as const, missing: plan.missing };
   if (input.currency !== plan.currency)
-    return { decision: 'needs_input' as const, missing: ['moeda compatível com o plano'] };
+    return { decision: 'needs_input' as const, missing: ['a currency compatible with the plan'] };
   const allowance = plan.freeMinor + (input.purpose === 'leisure' ? plan.leisureMinor : 0);
   if (plan.status === 'deficit')
     return {
       decision: 'not_recommended' as const,
-      reason: 'O plano já apresenta déficit; esta compra aumentaria a pressão nas contas.',
+      reason: 'The plan already has a deficit; this purchase would put more pressure on your bills.',
       allowanceMinor: allowance,
     };
   if (input.installments === 1)
@@ -245,20 +245,20 @@ export function assessPurchase(plan: FinancialPlan, input: Purchase) {
       decision: input.amountMinor <= allowance ? ('fits' as const) : ('wait' as const),
       reason:
         input.amountMinor <= allowance
-          ? 'Cabe na margem informada hoje, preservando as verbas protegidas.'
-          : 'O valor excede a margem disponível hoje. Não conte com limite de cartão como renda.',
+          ? 'It fits the reported allowance today while preserving protected funds.'
+          : 'The amount exceeds the allowance available today. Do not count credit limits as income.',
       allowanceMinor: allowance,
       remainingMinor: allowance - input.amountMinor,
     };
   if (!input.firstDueOn)
     return {
       decision: 'needs_input' as const,
-      missing: ['data da primeira parcela e valor total já incluindo juros'],
+      missing: ['the first installment date and total amount including interest'],
     };
   if (input.firstDueOn < plan.asOfOn)
     return {
       decision: 'needs_input' as const,
-      missing: ['data futura ou de hoje para a primeira parcela'],
+      missing: ['today or a future date for the first installment'],
     };
   const largestInstallmentMinor = Math.ceil(input.amountMinor / input.installments);
   if (
@@ -268,7 +268,7 @@ export function assessPurchase(plan: FinancialPlan, input: Purchase) {
   )
     return {
       decision: 'not_recommended' as const,
-      reason: 'A parcela compromete a margem de segurança do plano.',
+      reason: 'The installment compromises the safety buffer in the plan.',
       largestInstallmentMinor,
       allowanceMinor: allowance,
     };
@@ -294,7 +294,7 @@ export function assessPurchase(plan: FinancialPlan, input: Purchase) {
     if (largestInstallmentMinor > free + (input.purpose === 'leisure' ? row.leisureMinor : 0))
       return {
         decision: 'not_recommended' as const,
-        reason: `A parcela não cabe na projeção de ${period}.`,
+        reason: `The installment does not fit the projection for ${period}.`,
         largestInstallmentMinor,
         allowanceMinor: allowance,
       };
@@ -302,14 +302,14 @@ export function assessPurchase(plan: FinancialPlan, input: Purchase) {
   if (missing.length)
     return {
       decision: 'needs_input' as const,
-      missing: missing.map((m) => `projeção dos compromissos de ${m}`),
+      missing: missing.map((m) => `projected commitments for ${m}`),
       largestInstallmentMinor,
-      reason: 'A primeira parcela não prova que a compra caberá nos próximos meses.',
+      reason: 'The first installment does not prove that the purchase will be affordable in future months.',
     };
   return {
     decision: 'fits' as const,
     reason:
-      'As parcelas cabem nas projeções informadas, preservando essenciais, lazer e reserva; depende de manter esses dados atualizados.',
+      'The installments fit the supplied projections while preserving essentials, leisure and reserves; this depends on keeping the data up to date.',
     largestInstallmentMinor,
     allowanceMinor: allowance,
   };

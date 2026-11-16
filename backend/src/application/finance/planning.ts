@@ -89,7 +89,7 @@ export class FinancialPlanning {
       )
         return {
           status: 'needs_input' as const,
-          missing: ['saldo atualizado após importação, correção ou lançamento de outra data/moeda'],
+          missing: ['an updated balance after importing, correcting or recording an entry with another date/currency'],
         };
       values.cashMinor += changed.reduce(
         (sum, e) => sum + (e.kind === 'income' ? e.amountMinor : -e.amountMinor),
@@ -144,8 +144,8 @@ export class FinancialPlanning {
         })),
       })),
       warnings: [
-        'São lançamentos observados, não prova de cobertura completa de todas as contas ou renda futura.',
-        'Confirme renda líquida, despesas essenciais, acordos e uma verba de lazer antes de aprovar o plano.',
+        'These are observed entries, not proof of complete coverage of all accounts or future income.',
+        'Confirm net income, essential expenses, agreements and a leisure allowance before approving the plan.',
       ],
     };
   }
@@ -165,23 +165,23 @@ export class FinancialPlanning {
     };
     if (plan.status === 'needs_input') {
       const labels: Record<string, string> = {
-        currency: 'a moeda do plano (reais)',
-        asOfOn: 'a data do saldo informado',
-        cashMinor: 'seu saldo disponível hoje, sem limite de cartão',
-        nextIncomeOn: 'a data da próxima entrada',
-        monthlyIncomeMinor: 'sua renda líquida mensal',
-        incomeCertain: 'se essa renda está confirmada',
+        currency: 'the plan currency (BRL)',
+        asOfOn: 'the date of the reported balance',
+        cashMinor: 'your available balance today, excluding credit limits',
+        nextIncomeOn: 'the date of your next income',
+        monthlyIncomeMinor: 'your monthly net income',
+        incomeCertain: 'whether this income is confirmed',
         essentialsUntilIncomeMinor:
-          'quanto ainda precisa para despesas essenciais até a próxima entrada, sem repetir contas cadastradas',
-        monthlyEssentialsMinor: 'seu custo essencial mensal, sem repetir contas cadastradas',
-        leisureUntilIncomeMinor: 'uma verba realista de lazer até a próxima entrada',
-        monthlyLeisureMinor: 'a verba mensal de lazer que quer preservar',
-        bufferMinor: 'uma margem de segurança no saldo',
-        monthlyReserveMinor: 'sua reserva mensal planejada',
-        debtExtraUntilIncomeMinor: 'a verba adicional para dívidas até a próxima entrada',
-        monthlyDebtExtraMinor: 'a verba mensal adicional para negociar dívidas',
-        billsReviewed: 'confirmar se todas as contas e parcelas foram revisadas',
-        debtsReviewed: 'confirmar se todas as dívidas e acordos foram revisados',
+          'how much you still need for essentials until the next income, without counting recorded bills twice',
+        monthlyEssentialsMinor: 'your monthly essential costs, without counting recorded bills twice',
+        leisureUntilIncomeMinor: 'a realistic leisure allowance until the next income',
+        monthlyLeisureMinor: 'the monthly leisure allowance you want to preserve',
+        bufferMinor: 'a safety buffer in your balance',
+        monthlyReserveMinor: 'your planned monthly reserve',
+        debtExtraUntilIncomeMinor: 'the additional debt allowance until the next income',
+        monthlyDebtExtraMinor: 'the additional monthly allowance for debt negotiations',
+        billsReviewed: 'confirmation that all bills and installments have been reviewed',
+        debtsReviewed: 'confirmation that all debts and agreements have been reviewed',
       };
       return {
         ...base,
@@ -189,10 +189,10 @@ export class FinancialPlanning {
           {
             id: 'onboarding',
             statement:
-              'Vamos por uma informação de cada vez. Ainda não consigo dizer quanto está livre com segurança.',
+              'Let us take one piece of information at a time. I cannot reliably tell you how much is available yet.',
           },
         ],
-        missing: [labels[plan.missing[0] ?? ''] ?? plan.missing[0] ?? 'o plano'],
+        missing: [labels[plan.missing[0] ?? ''] ?? plan.missing[0] ?? 'the plan'],
       };
     }
     if (purchase) {
@@ -204,12 +204,12 @@ export class FinancialPlanning {
             id: 'purchase',
             statement:
               result.decision === 'fits'
-                ? 'Cabe nos dados revisados de hoje.'
+                ? 'It fits the data reviewed today.'
                 : result.decision === 'wait'
-                  ? 'Eu esperaria: essa compra passa da margem de hoje.'
+                  ? 'I would wait: this purchase exceeds the allowance available today.'
                   : result.decision === 'not_recommended'
-                    ? 'Não recomendo essa compra agora pelo impacto nas contas.'
-                    : 'Ainda não dá para avaliar essa compra.',
+                    ? 'I do not recommend this purchase now because of its impact on your bills.'
+                    : 'There is not enough information to assess this purchase yet.',
           },
         ],
         calculated:
@@ -217,7 +217,7 @@ export class FinancialPlanning {
             ? [
                 {
                   id: 'available',
-                  label: 'Margem disponível',
+                  label: 'Available allowance',
                   amountMinor: result.allowanceMinor,
                   currency: 'BRL',
                 },
@@ -234,26 +234,26 @@ export class FinancialPlanning {
           id: 'status',
           statement:
             plan.status === 'deficit'
-              ? 'O plano ainda não fecha. Vamos ajustar os compromissos antes de assumir uma compra nova.'
-              : `Esta é sua margem até ${plan.nextIncomeOn}, com as verbas protegidas separadas.`,
+              ? 'The plan does not balance yet. Let us adjust commitments before taking on a new purchase.'
+              : `This is your allowance until ${plan.nextIncomeOn}, with protected funds set aside.`,
         },
       ],
       calculated: [
         {
           id: 'free',
-          label: 'Livre para compras extras',
+          label: 'Available for extra purchases',
           amountMinor: plan.freeMinor,
           currency: 'BRL',
         },
         {
           id: 'week',
-          label: 'Limite de extras para os próximos sete dias (ou até a entrada)',
+          label: 'Extra spending limit for the next seven days (or until income arrives)',
           amountMinor: plan.weeklyMinor,
           currency: 'BRL',
         },
         {
           id: 'leisure',
-          label: 'Lazer previsto no plano',
+          label: 'Planned leisure allowance',
           amountMinor: plan.plannedLeisureMinor,
           currency: 'BRL',
         },
@@ -261,7 +261,7 @@ export class FinancialPlanning {
           ? [
               {
                 id: 'deficit',
-                label: 'Falta até a próxima entrada',
+                label: 'Shortfall until the next income',
                 amountMinor: plan.deficitMinor,
                 currency: 'BRL',
               },
@@ -269,10 +269,10 @@ export class FinancialPlanning {
           : []),
       ],
       explanations: [
-        'A verba de lazer já foi separada da margem para outras compras. Dívidas e contas não são motivo para julgamento.',
+        'The leisure allowance is already separate from the budget for other purchases. Debts and bills are not grounds for judgment.',
         ...(plan.unknownRateDebtIds.length
           ? [
-              'Há juros de dívidas ainda desconhecidos; não vou inventar qual acordo é mais vantajoso.',
+              'Some debt interest rates are unknown; I will not guess which agreement is better.',
             ]
           : []),
       ],
@@ -280,7 +280,7 @@ export class FinancialPlanning {
         {
           id: 'next',
           kind: 'ask',
-          label: 'Próximo passo: conferir a conta ou acordo com vencimento mais próximo.',
+          label: 'Next step: check the bill or agreement with the nearest due date.',
         },
       ],
     };

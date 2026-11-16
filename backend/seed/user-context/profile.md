@@ -1,5 +1,5 @@
 {
-  "primary_language": "pt-BR",
+  "primary_language": "en-US",
   "professional_language": "en",
   "work": [],
   "technology": [],

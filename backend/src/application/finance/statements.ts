@@ -39,7 +39,7 @@ export class Statements {
       revision: job.revision,
       ...(await this.storage.upload(job)),
       instructions:
-        'Envie o arquivo para esta URL. A análise começa após o upload; revise a prévia antes de confirmar.',
+        'Upload the file to this URL. Analysis starts after uploading; review the preview before confirming.',
     };
   }
   async get(user: string, assistant: string, id: string) {

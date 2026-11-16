@@ -38,7 +38,7 @@ test('silence grants nothing and each purpose expires on its own clock', async (
   expect(await consents.list('user-b', 'RIN')).toEqual([]);
 
   const declined = await handleConsent(consents, followUps, ids, turn('não precisa me chamar'));
-  expect(declined?.facts[0]?.statement).toBe('Tudo bem. Não vou chamar por causa disso.');
+  expect(declined?.facts[0]?.statement).toBe('All right. I will not contact you about this.');
   expect(declined?.facts[0]?.statement).not.toMatch(/deveria|culpa|pior/i);
   await handleConsent(consents, followUps, ids, turn('apaga isso'));
   expect(await consents.list('user-a', 'RIN')).toEqual([]);

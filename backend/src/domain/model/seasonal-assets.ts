@@ -51,7 +51,7 @@ export function replaceSeasonalAssets(
       id: 'HALLOWEEN_MORNING',
       name: 'Rin Halloween',
       useCase:
-        'Visual fictício de Halloween, sorteado no bom-dia durante outubro. Não presume que hoje seja 31 de outubro nem uma experiência física real.',
+        'Fictional Halloween appearance, randomly selected for morning greetings during October. Does not imply that today is October 31 or that any physical experience occurred.',
       enabled: true,
       priority: 100,
       rules: { months: [10], occasions: ['morning_briefing'], chance: 0.5 },
@@ -62,7 +62,7 @@ export function replaceSeasonalAssets(
       id: 'WEEKEND_RANDOM',
       name: 'Rin Weekend',
       useCase:
-        'Visual fictício de lazer, sorteado aos sábados, domingos e feriados cadastrados. Combina com praia e descanso, sem implicar viagem ou atividade física real.',
+        'Fictional leisure appearance, randomly selected on Saturdays, Sundays and configured holidays. Fits beach and rest themes without implying real travel or physical activity.',
       enabled: true,
       priority: 60,
       rules: {
@@ -75,14 +75,14 @@ export function replaceSeasonalAssets(
     }),
     rinAssetSetSchema.parse({
       id: 'SLEEP_NIGHT',
-      name: 'Rin de pijama à noite',
+      name: 'Rin in pajamas at night',
       useCase:
-        'Visual fictício de pijama e sono, entre 22h e 06h no fuso do usuário. Manter o jeito tsundere sonolento, sem inventar experiências físicas.',
+        'Fictional sleepy pajama appearance, from 22:00 to 06:00 in the user time zone. Keep a sleepy tsundere style without inventing physical experiences.',
       enabled: true,
       priority: 200,
       rules: { timeWindow: { start: '22:00', end: '06:00' } },
       fallbackExpression: sleep.expression,
-      images: [{ ...sleep, name: 'Rin Sleep — pijama' }],
+      images: [{ ...sleep, name: 'Rin Sleep — pajamas' }],
     }),
   ];
 }

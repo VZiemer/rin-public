@@ -291,8 +291,8 @@ export function planFollowUps(
         },
         text:
           followUp.skillId === 'support'
-            ? 'Oi. Combinamos de conversar depois. Quer conversar agora? Sem pressa.'
-            : 'Ficou combinado de retomar um assunto. Quer conversar sobre ele agora?',
+            ? 'Hi. We agreed to talk later. Would you like to talk now? No rush.'
+            : 'We agreed to revisit a subject. Would you like to talk about it now?',
         notBefore,
         windowEnd: followUp.windowEnd,
         priority: 'NORMAL',

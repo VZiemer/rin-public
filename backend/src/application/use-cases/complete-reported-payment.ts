@@ -47,7 +47,7 @@ export class CompleteReportedPayment {
     if (!candidates.length) return null;
     if (candidates.length > 1)
       return {
-        message: `Qual conta você pagou? Tenho mais de um lembrete possível: ${candidates.map((item) => item.title).join('; ')}.`,
+        message: `Which bill did you pay? There is more than one possible reminder: ${candidates.map((item) => item.title).join('; ')}.`,
         avatarState: 'FOCUSED',
         priority: 'NORMAL',
         actions: [],
@@ -65,8 +65,8 @@ export class CompleteReportedPayment {
     return {
       message:
         context.assistantId === 'RIN'
-          ? `Marquei “${saved.title}” como concluído. Essa cobrança acabou. Hmph.`
-          : `Marquei “${saved.title}” como concluído. Os avisos desse lembrete foram encerrados.`,
+          ? `I marked “${saved.title}” as complete. No more nagging about that one. Hmph.`
+          : `I marked “${saved.title}” as complete. Notifications for this reminder have ended.`,
       avatarState: 'SOFT_SMILE',
       priority: 'NORMAL',
       actions: [],

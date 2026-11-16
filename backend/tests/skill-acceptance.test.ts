@@ -9,7 +9,7 @@ import { agentOutputSchema } from '../src/domain/model/validation.js';
 test('the MVP answer stays compatible and each skill can be disabled alone', async () => {
   const failure = agentOutputSchema.parse(skillFailureOutput());
   expect(failure).toMatchObject({
-    message: expect.stringMatching(/Nada foi registrado/),
+    message: expect.stringMatching(/Nothing was recorded/),
     actions: [],
   });
   expect(failure).not.toHaveProperty('skillId');

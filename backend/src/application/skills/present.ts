@@ -4,17 +4,17 @@ import type { rinMoodContext } from '../agent/rin-mood.js';
 
 type RinMood = ReturnType<typeof rinMoodContext>;
 const moodIntroductions: Record<RinMood['effectiveTone'], string> = {
-  neutral: 'Olha só.',
-  happy: 'Olha aí.',
-  grumpy: 'Tá. Presta atenção.',
-  tired: 'Tá, vamos lá.',
-  playful: 'Olha só, criatura.',
-  curious: 'Vamos olhar isso direito.',
+  neutral: 'Take a look.',
+  happy: 'Look at that.',
+  grumpy: 'Fine. Pay attention.',
+  tired: 'All right, here we go.',
+  playful: 'Well, look at that.',
+  curious: 'Let us take a closer look.',
 };
 
 const HOSTILE =
-  /que frescura|para de drama|n[aã]o [eé] pra tanto|deixa de ser fraco|voc[eê] [eé] fraco|frescura/i;
-const CLAIM = /\b(gravei|registrei|transferi|investi|paguei sua conta)\b/i;
+  /stop being dramatic|stop being weak|you are weak|que frescura|para de drama|n[aã]o [eé] pra tanto|deixa de ser fraco|voc[eê] [eé] fraco|frescura/i;
+const CLAIM = /\b(I (?:saved|recorded|transferred|invested|paid your bill)|gravei|registrei|transferi|investi|paguei sua conta)\b/i;
 const MONEY = /-?R\$\s?\d[\d.]*,\d{2}|-?\d[\d.]*,\d{2}\s+[A-Z]{3}/g;
 
 export function formatMinor(amountMinor: number, currency: string): string {
@@ -32,15 +32,15 @@ export function formatMinor(amountMinor: number, currency: string): string {
 export function renderSkillMessage(result: SkillResult, mood?: RinMood): string {
   const parts: string[] = [];
   if (result.tone.allowSarcasm && result.tone.intensity === 'casual')
-    parts.push((mood ? moodIntroductions[mood.effectiveTone] : undefined) ?? 'Olha só.');
-  if (!result.tone.allowSarcasm) parts.push('Estou aqui.');
+    parts.push((mood ? moodIntroductions[mood.effectiveTone] : undefined) ?? 'Take a look.');
+  if (!result.tone.allowSarcasm) parts.push('I am here.');
   for (const fact of result.facts) parts.push(fact.statement);
   for (const value of result.calculated) {
     parts.push(`${value.label}: ${formatMinor(value.amountMinor, value.currency)}.`);
   }
   for (const explanation of result.explanations) parts.push(explanation);
   if (result.missing.length > 0) {
-    parts.push(`Preciso de ${result.missing.join(', ')}. Não vou inventar esses dados.`);
+    parts.push(`I need ${result.missing.join(', ')}. I will not invent this data.`);
   }
   for (const action of result.proposedActions) parts.push(action.label);
   return parts.join(' ').replace(/\s+/g, ' ').trim();
@@ -77,8 +77,8 @@ export function fallbackSkillOutput(result: SkillResult): AgentOutput {
     .map((value) => `${value.label}: ${formatMinor(value.amountMinor, value.currency)}.`)
     .join(' ');
   const message = values
-    ? `Vou ficar só com o que dá para conferir. ${values}`
-    : 'Não consegui validar a resposta, então não vou afirmar valores nem dizer que gravei alguma coisa.';
+    ? `I will stick to what can be verified. ${values}`
+    : 'I could not validate the response, so I will not assert amounts or claim I saved anything.';
   return {
     message,
     avatarState: 'FOCUSED',

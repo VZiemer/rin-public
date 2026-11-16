@@ -203,8 +203,8 @@ function personaFromAssistant(
 function defaultProfile(userId: string, now: string): UserProfile {
   return {
     userId,
-    primaryLanguage: 'pt-BR',
-    professionalLanguage: 'pt-BR',
+    primaryLanguage: 'en-US',
+    professionalLanguage: 'en-US',
     work: [],
     technology: [],
     workingStyle: [],

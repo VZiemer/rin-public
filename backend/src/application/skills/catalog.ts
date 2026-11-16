@@ -29,7 +29,7 @@ export function builtinSkillDefinitions(): SkillDefinition[] {
       id: 'flirt',
       version: '1',
       scope:
-        'Corresponder a flertes, cantadas e provocações iniciados pelo usuário, com a personalidade da RIN.',
+        'Respond to user-initiated flirting, pickup lines and teasing with the RIN personality.',
       allowedTools: ['get_mood', 'get_relationship_state'],
       contextNeeds: ['profile', 'working_memory'],
       proactive: { canPropose: false, kinds: [] },
@@ -39,7 +39,7 @@ export function builtinSkillDefinitions(): SkillDefinition[] {
     {
       id: 'conversation',
       version: '1',
-      scope: 'Conversa comum, tarefas, lembretes e lista de compras.',
+      scope: 'Everyday conversation, tasks, reminders and shopping lists.',
       allowedTools: conversationTools,
       contextNeeds: ['profile', 'working_memory', 'tasks'],
       proactive: { canPropose: true, kinds: ['accepted_follow_up'] },
@@ -49,7 +49,7 @@ export function builtinSkillDefinitions(): SkillDefinition[] {
     {
       id: 'finance',
       version: '1',
-      scope: 'Registros e análise de finanças pessoais, sem pagamento nem investimento.',
+      scope: 'Personal finance records and analysis, without payments or investments.',
       allowedTools: [
         'get_mood',
         'get_relationship_state',
@@ -75,7 +75,7 @@ export function builtinSkillDefinitions(): SkillDefinition[] {
     {
       id: 'support',
       version: '1',
-      scope: 'Escuta e apoio emocional, sem diagnóstico nem tratamento.',
+      scope: 'Listening and emotional support, without diagnosis or treatment.',
       allowedTools: ['get_current_time', 'get_mood', 'get_relationship_state'],
       contextNeeds: ['profile', 'working_memory', 'support_notes'],
       proactive: { canPropose: true, kinds: ['consented_follow_up'] },

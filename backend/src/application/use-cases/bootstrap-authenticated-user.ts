@@ -53,8 +53,8 @@ export class BootstrapAuthenticatedUser {
 
     const profile: UserProfile = {
       userId,
-      primaryLanguage: 'pt-BR',
-      professionalLanguage: 'pt-BR',
+      primaryLanguage: 'en-US',
+      professionalLanguage: 'en-US',
       work: [],
       technology: [],
       workingStyle: [],

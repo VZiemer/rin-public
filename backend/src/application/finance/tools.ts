@@ -77,7 +77,7 @@ export function financeTools(ledger: FinanceLedger): AgentTool[] {
         })
         .strict(),
       execute: async (input, context) => {
-        const missing = [input.limitMinor === undefined ? 'valor' : '', input.currency ? '' : 'moeda'].filter(Boolean);
+        const missing = [input.limitMinor === undefined ? 'amount' : '', input.currency ? '' : 'currency'].filter(Boolean);
         if (missing.length > 0) return { status: 'needs_input' as const, missing };
         const budget = await ledger.setBudget({
           userId: context.userId,
@@ -99,7 +99,7 @@ async function recordMovement(
   input: z.infer<typeof movement>,
   context: ToolExecutionContext,
 ) {
-  const missing = [input.amountMinor === undefined ? 'valor' : '', input.currency ? '' : 'moeda'].filter(Boolean);
+  const missing = [input.amountMinor === undefined ? 'amount' : '', input.currency ? '' : 'currency'].filter(Boolean);
   if (missing.length > 0) return { status: 'needs_input' as const, missing };
   const before = (await ledger.listEntries(context.userId, requireAssistant())).length;
   const saved = await ledger.recordEntry({

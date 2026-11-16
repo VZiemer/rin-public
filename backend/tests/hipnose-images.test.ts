@@ -51,7 +51,7 @@ const catalog = rinAssetCatalogSchema.parse({
     },
     {
       id: 'PAJAMAS',
-      name: 'Rin de pijama à noite',
+      name: 'Rin in pajamas at night',
       useCase: 'Visual de pijama rosa.',
       rules: { timeWindow: { start: '22:00', end: '06:00' } },
       fallbackExpression: 'TIRED',
@@ -153,6 +153,13 @@ function fixture() {
 }
 
 test.each([
+  ['hypnosis: mood 0', { kind: 'set', field: 'moodScore', value: '0' }],
+  ['hypnosis: intimacy 10', { kind: 'set', field: 'intimacyScore', value: '10' }],
+  ['hypnosis: personality deredere', { kind: 'set', field: 'personalityId', value: 'deredere' }],
+  ['hypnosis list images 2', { kind: 'image-list', page: 2 }],
+  ['hypnosis automatic images', { kind: 'image-auto' }],
+  ['hypnosis use pajamas', { kind: 'image-use', target: 'pajamas' }],
+  ['what is your mood?', { kind: 'query', field: 'moodScore' }],
   ['hipnose, se vista pra praia', { kind: 'image-use', target: 'pra praia' }],
   ['hipnose use sue pijama', { kind: 'image-use', target: 'sue pijama' }],
   ['hipnose: use rin_Pajamas', { kind: 'image-use', target: 'rin_Pajamas' }],
@@ -168,6 +175,9 @@ test.each([
 ])('parses direct command %s', (text, result) => expect(parseHipnose(text)).toEqual(result));
 
 test.each([
+  'hypnosis: mood 3 and intimacy 10',
+  'hypnosis use pajamas and mood 0',
+  'hypnosis use pajamas?',
   'hipnose use pijama?',
   'hipnose use pijama\ne humor 0',
   'hipnose use "rin_pajamas"',
@@ -299,7 +309,7 @@ test('manual selection is temporary, prepares download and bypasses calendar rul
       imageSha256: 'a'.repeat(64),
     }),
   );
-  expect(output?.message).toContain('Na próxima conversa ou sincronização');
+  expect(output?.message).toContain('The next conversation or sync');
   expect(f.statesByKey.get('u:RIN')).toEqual(f.initial);
   expect(f.states.save).not.toHaveBeenCalled();
   expect(f.deliveries.put).toHaveBeenCalledWith('RIN', await f.devices.get(), {
@@ -313,13 +323,13 @@ test('selection stays scoped to the addressed assistant and user, and requires d
   expect(await f.hipnose.handle('u', 'RIN', 'Yui, hipnose use pijama')).toBeNull();
   f.statesByKey.set('other:RIN', { ...f.initial, userId: 'other', diagnosticsEnabled: false });
   expect((await f.hipnose.handle('other', 'RIN', 'hipnose use pijama'))?.message).toContain(
-    'não está habilitado',
+    'is not enabled',
   );
   expect((await f.hipnose.handle('other', 'RIN', 'hipnose liste imagens'))?.message).toContain(
-    'não está habilitado',
+    'is not enabled',
   );
   expect((await f.hipnose.handle('other', 'RIN', 'use fantasia de maid'))?.message).toContain(
-    'não está habilitado',
+    'is not enabled',
   );
   expect(f.notifications.send).not.toHaveBeenCalled();
   expect(f.states.save).not.toHaveBeenCalled();
@@ -332,17 +342,17 @@ test('unknown, disabled or ambiguous requests never change the selection', async
     sets: [...catalog.sets, { ...catalog.sets[0]!, id: 'BEACH_2', images: [image('rin_beach2')] }],
   });
   expect((await f.hipnose.handle('u', 'RIN', 'hipnose se vista pra praia'))?.message).toContain(
-    'Mais de uma imagem',
+    'More than one image',
   );
   expect((await f.hipnose.handle('u', 'RIN', 'hipnose use marciana'))?.message).toContain(
-    'Não encontrei',
+    'I could not find',
   );
   f.catalogs.get.mockResolvedValue({
     ...catalog,
     sets: catalog.sets.map((set) => ({ ...set, enabled: false })),
   });
   expect((await f.hipnose.handle('u', 'RIN', 'hipnose use rin_pajamas'))?.message).toContain(
-    'Não tenho imagens',
+    'There are no images',
   );
   expect(f.states.save).not.toHaveBeenCalled();
 });
@@ -358,12 +368,12 @@ test('lists pages without overflowing the Android message contract', async () =>
     })),
   });
   const result = await f.hipnose.handle('u', 'RIN', 'hipnose liste imagens 2');
-  expect(result?.message).toContain('página 2/3');
+  expect(result?.message).toContain('page 2/3');
   expect(result?.message).toContain('image10');
   expect(result?.message).not.toContain('• image0 ');
   expect(result!.message.length).toBeLessThan(8000);
   expect((await f.hipnose.handle('u', 'RIN', 'hipnose liste imagens 0'))?.message).toContain(
-    'Essa página não existe',
+    'That page does not exist',
   );
 });
 
@@ -390,7 +400,7 @@ test('permission revoked during download preparation and concurrent writes are r
     return { status: 'sent' };
   });
   expect((await f.hipnose.handle('u', 'RIN', 'hipnose use pijama'))?.message).toContain(
-    'configuração mudou',
+    'configuration changed',
   );
   expect(f.states.save).not.toHaveBeenCalled();
 });
@@ -404,7 +414,7 @@ test('return to automatic does not write behavior state or reset mood recovery',
     manualImageName: 'rin_pajamas',
   });
   expect((await f.hipnose.handle('u', 'RIN', 'hipnose imagens automáticas'))?.message).toContain(
-    'automática',
+    'automatic',
   );
   expect(f.states.save).not.toHaveBeenCalled();
   expect(f.statesByKey.get('u:RIN')).toMatchObject({
@@ -624,13 +634,13 @@ test('temporary outfit choice leaves subsequent mood/personality commands indepe
   const f = fixture();
   await f.hipnose.handle('u', 'RIN', 'hipnose use pijama');
   expect((await f.hipnose.handle('u', 'RIN', 'hipnose: humor 0'))?.message).toContain(
-    'Humor definido',
+    'Mood set',
   );
   expect(f.statesByKey.get('u:RIN')).toMatchObject({
     moodScore: 0,
   });
   expect(
     (await f.hipnose.handle('u', 'RIN', 'hipnose: personalidade tsundere'))?.message,
-  ).toContain('Personalidade alterada');
+  ).toContain('Personality changed');
   expect(f.statesByKey.get('u:RIN')).not.toHaveProperty('manualImageName');
 });

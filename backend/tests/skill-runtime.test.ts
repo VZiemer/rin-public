@@ -139,7 +139,7 @@ test('a skill failure does not claim that data was saved', async () => {
     message: 'gastei 10 reais no mercado',
     context: await context(),
   });
-  expect(output.message).toMatch(/Nada foi registrado/);
+  expect(output.message).toMatch(/Nothing was recorded/);
   expect(output.message).not.toMatch(/registrei|consultei/i);
   expect(JSON.stringify(events)).not.toContain('TOKEN-SEGREDO-42');
   expect(JSON.stringify(events)).not.toContain('reais');
@@ -177,7 +177,7 @@ test('yes applies only one unequivocal pending operation', async () => {
     message: 'sim',
     context: built,
   });
-  expect(ambiguous.message).toMatch(/mais de uma operação/);
+  expect(ambiguous.message).toMatch(/more than one pending operation/);
   expect(applyPending).not.toHaveBeenCalled();
 
   const single = new InMemoryPendingSkillOperationRepository();
@@ -206,7 +206,7 @@ test('yes applies only one unequivocal pending operation', async () => {
     message: 'sim',
     context: built,
   });
-  expect(failed.message).toMatch(/Nada foi registrado/);
+  expect(failed.message).toMatch(/Nothing was recorded/);
   expect((await failing.get('user-a', 'RIN', 'boom'))?.status).toBe('pending');
 });
 

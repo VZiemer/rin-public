@@ -23,11 +23,11 @@ fun SessionRestoreScreen(failed: Boolean, onRetry: () -> Unit) {
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             if (failed) {
-                Text("Não foi possível reconectar. Confira sua conexão e tente novamente.")
+                Text("Could not reconnect. Check your connection and try again.")
                 RinOutlineButton(onClick = onRetry) { Text("Tentar novamente") }
             } else {
                 CircularProgressIndicator()
-                Text("Reconectando…")
+                Text("Reconnecting…")
             }
         }
     }

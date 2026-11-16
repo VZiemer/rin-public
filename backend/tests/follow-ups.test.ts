@@ -23,7 +23,7 @@ test('a request to ask later is a commitment and a suggestion is not', async () 
   const repo = new InMemoryFollowUpRepository();
   const ids = { next: () => `f-${n++}` };
   const created = await handleFollowUp(repo, ids, turn('depois me pergunta sobre isso'));
-  expect(created?.facts[0]?.statement).toMatch(/combinado/);
+  expect(created?.facts[0]?.statement).toMatch(/as agreed/);
   const stored = (await repo.list('user-a', 'RIN'))[0];
   expect(stored && canApproach(stored, now)).toBe(true);
   expect(await repo.list('user-b', 'RIN')).toEqual([]);
@@ -40,7 +40,7 @@ test('a request to ask later is a commitment and a suggestion is not', async () 
   await repo.put(suggestion);
 
   const refused = await handleFollowUp(repo, ids, turn('não precisa'));
-  expect(refused?.facts[0]?.statement).toMatch(/não vou insistir/i);
+  expect(refused?.facts[0]?.statement).toMatch(/I will not insist/i);
   const postponed = await handleFollowUp(repo, ids, turn('depois me pergunta sobre isso'));
   await handleFollowUp(repo, ids, turn('deixa pra semana que vem'));
   const later = (await repo.list('user-a', 'RIN')).find((item) => item.id === postponed?.facts[0]?.id);

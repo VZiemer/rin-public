@@ -10,40 +10,40 @@ import type { SendNotification } from './send-notification.js';
 export const testPushTimezone = 'America/Sao_Paulo';
 const messages: Record<(typeof androidEmotionStates)[number], readonly string[]> = {
   neutral: [
-    'Vim conferir se você ainda lembra que tem coisas para fazer. De nada.',
-    'Passando só para fiscalizar. Alguém precisa manter algum padrão por aqui.',
+    'I came to check whether you remember you have things to do. You are welcome.',
+    'Just checking in. Someone has to maintain standards around here.',
   ],
   scolding: [
-    'Ei, gênio. Endireita essa postura. Sua coluna não é um ponto de interrogação.',
-    'Já bebeu água ou vou ter que abrir um chamado para isso também?',
+    'Hey, genius. Straighten up. Your spine is not a question mark.',
+    'Have you had water, or do I need to open a ticket for that too?',
   ],
   smug: [
-    'Mais uma hora e eu continuo sendo a parte organizada desta dupla. Que surpresa.',
-    'Pode admitir: essa rotina ficou bem mais interessante comigo dando ordens.',
+    'Another hour, and I am still the organized half of this duo. What a surprise.',
+    'Admit it: this routine got much more interesting with me giving orders.',
   ],
   embarrassed: [
-    'Não é como se eu estivesse esperando para falar com você. Era só a hora do teste!',
-    'Eu só vim ver se está tudo bem. Não transforma isso num evento, tá?',
+    'It is not like I was waiting to talk to you. It was just time for the test!',
+    'I just came to check that everything is fine. Do not make a big deal of it, okay?',
   ],
   angry_pout: [
-    'Hmph. Se você ignorar mais esse aviso, vou considerar uma afronta à minha competência.',
-    'Seu talento para me deixar falando sozinha merece estudo. Não elogio. Estudo.',
+    'Hmph. If you ignore this alert too, I will consider it an insult to my competence.',
+    'Your talent for leaving me talking to myself deserves study. Not praise. Study.',
   ],
   surprised: [
-    'Olha só, você apareceu! Já estava quase te catalogando como processo em segundo plano.',
-    'Você leu a mensagem? Milagres tecnológicos acontecem mesmo.',
+    'Look, you showed up! I was about to classify you as a background process.',
+    'You read the message? Technological miracles do happen.',
   ],
   soft_smile: [
-    'Faz uma pausa pequena. Até você funciona melhor sem tentar virar um servidor 24 horas.',
-    'Está indo bem. Pronto, elogiei. Não se acostuma e vai beber água.',
+    'Take a short break. Even you work better without trying to become a 24-hour server.',
+    'You are doing well. There, I praised you. Do not get used to it, and go drink water.',
   ],
   focused: [
-    'Uma coisa de cada vez. Essas vinte abas abertas não contam como estratégia.',
-    'Escolhe uma tarefa e termina. Colecionar começos não é produtividade.',
+    'One thing at a time. Those twenty open tabs do not count as a strategy.',
+    'Pick a task and finish it. Collecting beginnings is not productivity.',
   ],
   tired: [
-    'Até eu cansei de olhar essa tela. Levanta um pouco, criatura.',
-    'Se cansaço desse XP, você já teria zerado o jogo. Faz uma pausa decente.',
+    'Even I am tired of looking at that screen. Get up for a bit.',
+    'If tiredness gave XP, you would have beaten the game already. Take a proper break.',
   ],
 };
 const avatarByEmotion: Record<

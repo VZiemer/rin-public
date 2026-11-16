@@ -15,7 +15,7 @@ export class StaticAgentModelGateway implements AgentModelGateway {
       output: {
         message: request.results.length
           ? `Resultado: ${JSON.stringify(request.results[request.results.length - 1]?.output)}`
-          : 'Estou pronta para ajudar. O modelo está em modo estático.',
+          : 'I am ready to help. The model is in static mode.',
         avatarState: 'NEUTRAL',
         priority: 'NORMAL',
         actions: [],
