@@ -23,6 +23,8 @@ git config core.hooksPath .githooks
 
 Os hooks bloqueiam commit/push se o scanner faltar ou detectar violações. Hooks locais não são instalados automaticamente pelo Git em outros clones e podem ser desativados; a CI complementa essa proteção.
 
+Alternativamente, configure o caminho local do executável com `git config rin.gitleaksPath CAMINHO_DO_EXECUTAVEL`. Esse valor fica apenas na configuração local do Git.
+
 1. Trabalhe neste clone público, selecionando alterações técnicas individualmente.
 2. Revise o diff completo, inclusive arquivos novos e fixtures; use dados fictícios.
 3. Execute testes e `npm run test:publication`.
